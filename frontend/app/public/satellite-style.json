@@ -1,0 +1,42 @@
+{
+  "version": 8,
+  "name": "RainMind Satellite",
+  "sources": {
+    "esri-satellite": {
+      "type": "raster",
+      "tiles": [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+      ],
+      "tileSize": 256,
+      "attribution": "© Esri, Maxar, Earthstar Geographics"
+    },
+    "carto-labels": {
+      "type": "raster",
+      "tiles": [
+        "https://basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}@2x.png"
+      ],
+      "tileSize": 256,
+      "attribution": "© CARTO"
+    }
+  },
+  "layers": [
+    {
+      "id": "satellite-base",
+      "type": "raster",
+      "source": "esri-satellite",
+      "paint": {
+        "raster-brightness-max": 0.65,
+        "raster-contrast": 0.2,
+        "raster-saturation": -0.3
+      }
+    },
+    {
+      "id": "labels-overlay",
+      "type": "raster",
+      "source": "carto-labels",
+      "paint": {
+        "raster-opacity": 0.85
+      }
+    }
+  ]
+}

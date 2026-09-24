@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F3F8FC;
+  --foreground: #0B2A4A;
+}
+
+body {
+  background-color: #F3F8FC;
+  color: #0B2A4A;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+/* Custom Claymorphic System */
+@layer components {
+  .clay-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 25px -5px rgba(11, 42, 74, 0.05), 
+                0 8px 10px -6px rgba(11, 42, 74, 0.03), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .clay-card-interactive {
+    background: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 25px -5px rgba(11, 42, 74, 0.05), 
+                0 8px 10px -6px rgba(11, 42, 74, 0.03), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .clay-card-interactive:hover {
+    box-shadow: 0 16px 30px -4px rgba(11, 42, 74, 0.08), 
+                0 10px 12px -6px rgba(11, 42, 74, 0.04), 
+                inset 0 1px 2px 0 rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+  }
+
+  .clay-panel {
+    background: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 1.5rem;
+    box-shadow: 0 12px 30px -8px rgba(11, 42, 74, 0.06), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  .clay-inset {
+    background: #F0F6FA;
+    border-radius: 0.875rem;
+    box-shadow: inset 0 2px 4px 0 rgba(11, 42, 74, 0.06), 
+                inset 0 1px 2px 0 rgba(11, 42, 74, 0.04);
+  }
+
+  .clay-button-primary {
+    background: linear-gradient(180deg, #378CE7 0%, #2F80D9 100%);
+    color: #FFFFFF;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 16px -2px rgba(47, 128, 217, 0.35), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.15s ease-in-out;
+  }
+  .clay-button-primary:hover {
+    background: linear-gradient(180deg, #4495EC 0%, #2975C9 100%);
+    box-shadow: 0 8px 22px -2px rgba(47, 128, 217, 0.45), 
+                inset 0 1px 2px 0 rgba(255, 255, 255, 0.65);
+    transform: translateY(-1px);
+  }
+  .clay-button-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px -1px rgba(47, 128, 217, 0.35), 
+                inset 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .clay-button-secondary {
+    background: #FFFFFF;
+    color: #0B2A4A;
+    border: 1px solid rgba(220, 235, 248, 0.8);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 10px -2px rgba(11, 42, 74, 0.04), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+    transition: all 0.15s ease-in-out;
+  }
+  .clay-button-secondary:hover {
+    background: #F9FBFE;
+    border-color: #2F80D9;
+    box-shadow: 0 6px 14px -2px rgba(11, 42, 74, 0.07), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+  }
+
+  .clay-sidebar-item {
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+  }
+  .clay-sidebar-item-active {
+    background: #EAF5FF;
+    color: #2F80D9;
+    box-shadow: 0 4px 12px -2px rgba(47, 128, 217, 0.15), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+  }
+
+  .clay-pill-active {
+    background: #EAF5FF;
+    color: #2F80D9;
+    border: 1px solid rgba(47, 128, 217, 0.2);
+    box-shadow: 0 2px 6px -1px rgba(47, 128, 217, 0.15), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .clay-input {
+    background: #F8FAFC;
+    border: 1px solid #E2EAF2;
+    border-radius: 0.625rem;
+    box-shadow: inset 0 2px 4px 0 rgba(11, 42, 74, 0.04);
+    color: #0B2A4A;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .clay-input:focus {
+    outline: none;
+    border-color: #2F80D9;
+    box-shadow: 0 0 0 3px rgba(47, 128, 217, 0.15), inset 0 1px 2px 0 rgba(11, 42, 74, 0.03);
+    background: #FFFFFF;
+  }
+
+  .clay-kpi {
+    background: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 20px -4px rgba(11, 42, 74, 0.05), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F0F6FA;
+}
+::-webkit-scrollbar-thumb {
+  background: #C4D7E8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9DBED8;
+}

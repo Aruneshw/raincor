@@ -1,0 +1,17 @@
+{
+  "name": "raincor-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RAINCOR — India Monsoon Intelligence & Weather Forecasting Operational Platform",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "start": "npm run start --prefix frontend",
+    "lint": "npm run lint --prefix frontend",
+    "typecheck": "npm run typecheck --prefix frontend",
+    "test": "npm run test --prefix frontend"
+  },
+  "workspaces": [
+    "frontend"
+  ]
+}

@@ -1,0 +1,7 @@
+xarray>=2023.0.0
+netCDF4>=1.6.0
+cfgrib>=0.9.10
+pandas>=2.0.0
+numpy>=1.26.0
+scipy>=1.11.0
+pytest>=8.0.0
