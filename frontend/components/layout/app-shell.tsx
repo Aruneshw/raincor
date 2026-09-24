@@ -11,7 +11,7 @@ interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   return (
-    <div className="flex min-h-screen bg-[#F3F8FC] text-navy font-sans antialiased">
+    <div className="flex min-h-screen bg-[#F3F8FC] dark:bg-[#0B0F19] text-navy font-sans antialiased transition-colors duration-200">
       {/* Persistent Navigation Sidebar */}
       <Sidebar />
 

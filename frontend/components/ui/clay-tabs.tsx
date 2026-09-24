@@ -25,7 +25,7 @@ export function ClayTabs<T extends string>({
   return (
     <div
       className={cn(
-        "inline-flex p-1 bg-[#EEF4FA] rounded-xl border border-white/80 shadow-[inset_0_2px_4px_rgba(11,42,74,0.05)]",
+        "inline-flex p-1 bg-[#EEF4FA] dark:bg-slate-800/90 rounded-xl border border-white/80 dark:border-white/10 shadow-[inset_0_2px_4px_rgba(11,42,74,0.05)]",
         className
       )}
     >
@@ -40,8 +40,8 @@ export function ClayTabs<T extends string>({
               "flex items-center gap-2 rounded-lg font-medium transition-all duration-150",
               size === "sm" ? "px-2.5 py-1 text-xs" : "px-3.5 py-1.5 text-xs sm:text-sm",
               isActive
-                ? "bg-white text-navy font-semibold shadow-[0_2px_8px_rgba(11,42,74,0.08),inset_0_1px_1px_rgba(255,255,255,1)]"
-                : "text-navy-muted hover:text-navy hover:bg-white/40"
+                ? "bg-white dark:bg-slate-700 text-navy dark:text-white font-semibold shadow-sm"
+                : "text-navy-muted dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-white/40 dark:hover:bg-white/5"
             )}
           >
             <span>{option.label}</span>
@@ -49,7 +49,9 @@ export function ClayTabs<T extends string>({
               <span
                 className={cn(
                   "px-1.5 py-0.5 rounded-full text-[10px]",
-                  isActive ? "bg-brand-blue text-white" : "bg-slate-200 text-slate-600"
+                  isActive
+                    ? "bg-brand-blue text-white"
+                    : "bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
                 )}
               >
                 {option.badge}

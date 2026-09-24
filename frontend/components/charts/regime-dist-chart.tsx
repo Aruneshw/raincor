@@ -21,7 +21,7 @@ export const RegimeDistChart: React.FC<RegimeDistChartProps> = ({
         data: distribution.map((d) => d.gridCount),
         backgroundColor: distribution.map((d) => d.color),
         borderWidth: 2,
-        borderColor: "#FFFFFF",
+        borderColor: "rgba(255, 255, 255, 0.2)",
         hoverOffset: 4,
       },
     ],
@@ -39,11 +39,15 @@ export const RegimeDistChart: React.FC<RegimeDistChartProps> = ({
           usePointStyle: true,
           font: { size: 11, weight: "500" },
           padding: 8,
-          color: "#0B2A4A",
+          color: "#94A3B8",
         },
       },
       tooltip: {
-        backgroundColor: "#0B2A4A",
+        backgroundColor: "#0F172A",
+        titleColor: "#F8FAFC",
+        bodyColor: "#F8FAFC",
+        borderColor: "rgba(255, 255, 255, 0.1)",
+        borderWidth: 1,
         callbacks: {
           label: (context: any) => {
             const item = distribution[context.dataIndex];
@@ -60,3 +64,5 @@ export const RegimeDistChart: React.FC<RegimeDistChartProps> = ({
     </div>
   );
 };
+
+export default RegimeDistChart;

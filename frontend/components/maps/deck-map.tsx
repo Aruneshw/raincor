@@ -12,6 +12,7 @@ import { Play, Pause, Clock, Satellite, Map as MapIcon } from "lucide-react";
 import { useMapStore } from "@/store/map-store";
 import { useForecastStore } from "@/store/forecast-store";
 import { useFilterStore } from "@/store/filter-store";
+import { useThemeStore } from "@/store/theme-store";
 import { getIndiaGrids } from "@/lib/grid-generator";
 import { GridCell } from "@/types/grid";
 import { DistrictForecast, DistrictResponse } from "@/types/district";
@@ -117,6 +118,12 @@ export const DeckMap: React.FC = () => {
   const [districts, setDistricts] = useState<DistrictForecast[]>([]);
   const [baseMap, setBaseMap] = useState<"satellite" | "dark">("satellite");
   const [viewState, setViewState] = useState<any>(INITIAL_VIEW_STATE);
+  const { theme } = useThemeStore();
+
+  // Synchronize basemap style with dark/light mode preference
+  useEffect(() => {
+    setBaseMap(theme === "dark" ? "dark" : "satellite");
+  }, [theme]);
 
   // Time-Series Animation State
   const [isPlaying, setIsPlaying] = useState(false);

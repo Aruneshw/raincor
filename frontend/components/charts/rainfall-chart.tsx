@@ -24,8 +24,8 @@ export const RainfallChart: React.FC<RainfallChartProps> = ({
       {
         label: "Observed (IMD AWS)",
         data: series.map((s) => s.observedMm ?? null),
-        borderColor: "#08213D",
-        backgroundColor: "#08213D",
+        borderColor: "#0284C7",
+        backgroundColor: "#0284C7",
         borderWidth: 2.5,
         pointRadius: 4,
         pointHoverRadius: 6,
@@ -84,11 +84,16 @@ export const RainfallChart: React.FC<RainfallChartProps> = ({
           boxHeight: 12,
           usePointStyle: true,
           font: { size: 11, weight: "500" },
+          color: "#94A3B8",
           filter: (item: any) => !item.text.includes("Bound"),
         },
       },
       tooltip: {
-        backgroundColor: "#0B2A4A",
+        backgroundColor: "#0F172A",
+        titleColor: "#F8FAFC",
+        bodyColor: "#F8FAFC",
+        borderColor: "rgba(255, 255, 255, 0.1)",
+        borderWidth: 1,
         titleFont: { size: 12, weight: "600" },
         bodyFont: { size: 12 },
         padding: 10,
@@ -100,13 +105,13 @@ export const RainfallChart: React.FC<RainfallChartProps> = ({
     },
     scales: {
       x: {
-        grid: { color: "#F1F5F9" },
-        ticks: { font: { size: 11 }, color: "#64748B" },
+        grid: { color: "rgba(148, 163, 184, 0.12)" },
+        ticks: { font: { size: 11 }, color: "#94A3B8" },
       },
       y: {
-        title: { display: true, text: "Rainfall (mm)", color: "#64748B", font: { size: 11 } },
-        grid: { color: "#F1F5F9" },
-        ticks: { font: { size: 11 }, color: "#64748B" },
+        title: { display: true, text: "Rainfall (mm)", color: "#94A3B8", font: { size: 11 } },
+        grid: { color: "rgba(148, 163, 184, 0.12)" },
+        ticks: { font: { size: 11 }, color: "#94A3B8" },
         beginAtZero: true,
       },
     },
@@ -118,3 +123,5 @@ export const RainfallChart: React.FC<RainfallChartProps> = ({
     </div>
   );
 };
+
+export default RainfallChart;

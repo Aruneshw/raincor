@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Layers, CloudRain, Wind, Activity, Eye, Compass, Maximize2 } from "lucide-react";
-import { useMapStore, MapLayerType, ViewModeType } from "@/store/map-store";
+import { CloudRain, Wind, Activity, Eye } from "lucide-react";
+import { useMapStore, MapLayerType } from "@/store/map-store";
 import { useForecastStore } from "@/store/forecast-store";
 import { ForecastDisplayMode } from "@/types/forecast";
 import { INDIAN_REGIONS } from "@/lib/constants";
@@ -27,9 +27,9 @@ export const MapToolbar: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white/90 backdrop-blur-md rounded-2xl border border-white/80 shadow-clay">
+    <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white/90 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-2xl border border-white/80 dark:border-white/10 shadow-clay transition-colors duration-200">
       {/* Model Mode Selector */}
-      <div className="flex items-center gap-1.5 bg-[#EEF4FA] p-1 rounded-xl">
+      <div className="flex items-center gap-1.5 bg-[#EEF4FA] dark:bg-slate-800/80 p-1 rounded-xl">
         {modes.map((mode) => (
           <button
             key={mode.id}
@@ -37,8 +37,8 @@ export const MapToolbar: React.FC = () => {
             onClick={() => setDisplayMode(mode.id)}
             className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
               displayMode === mode.id
-                ? "bg-white text-navy shadow-sm"
-                : "text-slate-600 hover:text-navy hover:bg-white/40"
+                ? "bg-white dark:bg-slate-700 text-navy dark:text-white shadow-sm"
+                : "text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-white/40 dark:hover:bg-white/5"
             }`}
           >
             {mode.label}
@@ -47,7 +47,7 @@ export const MapToolbar: React.FC = () => {
       </div>
 
       {/* Layer Selector */}
-      <div className="flex items-center gap-1 bg-[#EEF4FA] p-1 rounded-xl">
+      <div className="flex items-center gap-1 bg-[#EEF4FA] dark:bg-slate-800/80 p-1 rounded-xl">
         {layers.map((layer) => (
           <button
             key={layer.id}
@@ -56,7 +56,7 @@ export const MapToolbar: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
               selectedLayer === layer.id
                 ? "bg-brand-blue text-white shadow-sm"
-                : "text-slate-600 hover:text-navy hover:bg-white/40"
+                : "text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-white/40 dark:hover:bg-white/5"
             }`}
           >
             {layer.icon}
@@ -70,21 +70,23 @@ export const MapToolbar: React.FC = () => {
         <select
           value={selectedRegion}
           onChange={(e) => setSelectedRegion(e.target.value)}
-          className="text-xs bg-white border border-slate-200 text-navy font-medium rounded-xl px-2.5 py-1.5 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+          className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-navy dark:text-white font-medium rounded-xl px-2.5 py-1.5 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
         >
           {INDIAN_REGIONS.map((r) => (
-            <option key={r} value={r}>
+            <option key={r} value={r} className="dark:bg-slate-800 dark:text-white">
               {r}
             </option>
           ))}
         </select>
 
-        <div className="flex items-center rounded-xl bg-slate-100 p-0.5 border border-slate-200">
+        <div className="flex items-center rounded-xl bg-slate-100 dark:bg-slate-800 p-0.5 border border-slate-200 dark:border-white/10">
           <button
             type="button"
             onClick={() => setViewMode("grid")}
             className={`px-2.5 py-1 text-xs font-medium rounded-lg ${
-              viewMode === "grid" ? "bg-white text-navy font-semibold shadow-xs" : "text-slate-500"
+              viewMode === "grid"
+                ? "bg-white dark:bg-slate-700 text-navy dark:text-white font-semibold shadow-xs"
+                : "text-slate-500 dark:text-slate-400"
             }`}
           >
             Grid
@@ -93,7 +95,9 @@ export const MapToolbar: React.FC = () => {
             type="button"
             onClick={() => setViewMode("district")}
             className={`px-2.5 py-1 text-xs font-medium rounded-lg ${
-              viewMode === "district" ? "bg-white text-navy font-semibold shadow-xs" : "text-slate-500"
+              viewMode === "district"
+                ? "bg-white dark:bg-slate-700 text-navy dark:text-white font-semibold shadow-xs"
+                : "text-slate-500 dark:text-slate-400"
             }`}
           >
             District
@@ -103,3 +107,5 @@ export const MapToolbar: React.FC = () => {
     </div>
   );
 };
+
+export default MapToolbar;

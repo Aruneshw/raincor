@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { X, CloudRain, Calendar, Clock, Download } from "lucide-react";
+import { X, CloudRain } from "lucide-react";
 import { useMapStore } from "@/store/map-store";
 import { raincorApi } from "@/services/api/client";
 import { GridTimeSeriesResponse } from "@/types/forecast";
@@ -41,25 +41,27 @@ export const TimeSeriesModal: React.FC = () => {
   if (!isTimeSeriesModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-3xl clay-card bg-white p-6 shadow-2xl border border-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 dark:bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      <div className="relative w-full max-w-3xl clay-card bg-white dark:bg-[#111827] p-6 shadow-2xl border border-white/90 dark:border-white/10 transition-colors duration-200">
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-brand-blue-light flex items-center justify-center text-brand-blue shadow-inner">
+            <div className="w-10 h-10 rounded-2xl bg-brand-blue-light dark:bg-blue-950/60 flex items-center justify-center text-brand-blue dark:text-sky-400 shadow-inner">
               <CloudRain className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold text-navy">
+                <h3 className="text-lg font-bold text-navy dark:text-white">
                   Grid Rainfall Time-Series ({selectedGridId})
                 </h3>
                 <ClayBadge variant="primary" size="sm">
                   T+72h Forecast
                 </ClayBadge>
               </div>
-              <p className="text-xs text-slate-500">
-                {data ? `${data.district}, ${data.state} • Ensemble Spread & Bias Corrected Trajectory` : "Loading grid forecast..."}
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {data
+                  ? `${data.district}, ${data.state} • Ensemble Spread & Bias Corrected Trajectory`
+                  : "Loading grid forecast..."}
               </p>
             </div>
           </div>
@@ -67,7 +69,7 @@ export const TimeSeriesModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setTimeSeriesModalOpen(false)}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-navy hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -86,7 +88,7 @@ export const TimeSeriesModal: React.FC = () => {
               <button
                 type="button"
                 onClick={loadTimeSeries}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold hover:bg-slate-200 transition-colors"
+                className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
               >
                 Retry Request
               </button>
@@ -95,22 +97,36 @@ export const TimeSeriesModal: React.FC = () => {
             <div>
               <RainfallChart series={data.series} height={280} />
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-slate-100 text-center">
-                <div className="p-2.5 rounded-xl bg-slate-50">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Peak 6h Rate</span>
-                  <span className="text-sm font-bold text-navy">42.5 mm</span>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-white/10 text-center">
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-white/5">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-400 block">
+                    Peak 6h Rate
+                  </span>
+                  <span className="text-sm font-bold text-navy dark:text-white">42.5 mm</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-slate-50">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">72h Accumulation</span>
-                  <span className="text-sm font-bold text-brand-blue">148.2 mm</span>
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-white/5">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-400 block">
+                    72h Accumulation
+                  </span>
+                  <span className="text-sm font-bold text-brand-blue dark:text-sky-400">
+                    148.2 mm
+                  </span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-slate-50">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">P90 Max Ceiling</span>
-                  <span className="text-sm font-bold text-purple-700">192.0 mm</span>
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-white/5">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-400 block">
+                    P90 Max Ceiling
+                  </span>
+                  <span className="text-sm font-bold text-purple-700 dark:text-purple-400">
+                    192.0 mm
+                  </span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-slate-50">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Heavy Rain Risk</span>
-                  <span className="text-sm font-bold text-rose-600">High (78%)</span>
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-white/5">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-400 block">
+                    Heavy Rain Risk
+                  </span>
+                  <span className="text-sm font-bold text-rose-600 dark:text-rose-400">
+                    High (78%)
+                  </span>
                 </div>
               </div>
             </div>
@@ -118,7 +134,7 @@ export const TimeSeriesModal: React.FC = () => {
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-500">
+        <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-white/10 text-xs text-slate-500 dark:text-slate-400">
           <span>Source: NCMRWF NCUM + IMD AWS Observations + RAINCOR Bias Correction</span>
           <ClayButton variant="secondary" size="sm" onClick={() => setTimeSeriesModalOpen(false)}>
             Close
@@ -128,3 +144,5 @@ export const TimeSeriesModal: React.FC = () => {
     </div>
   );
 };
+
+export default TimeSeriesModal;

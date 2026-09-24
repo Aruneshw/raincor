@@ -11,13 +11,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#F3F8FC",
-        foreground: "#0B2A4A",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         navy: {
-          DEFAULT: "#0B2A4A",
-          deep: "#08213D",
-          light: "#184572",
-          muted: "#4F6E8C",
+          DEFAULT: "var(--navy-default, #0B2A4A)",
+          deep: "var(--navy-deep, #08213D)",
+          light: "var(--navy-light, #184572)",
+          muted: "var(--navy-muted, #4F6E8C)",
         },
         brand: {
           blue: "#2F80D9",

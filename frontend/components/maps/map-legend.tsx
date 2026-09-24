@@ -9,8 +9,8 @@ interface MapLegendProps {
 export const MapLegend: React.FC<MapLegendProps> = ({ layer }) => {
   if (layer === "regime") {
     return (
-      <div className="p-3 bg-white/95 backdrop-blur-xs rounded-xl border border-white/80 shadow-md text-xs">
-        <div className="font-semibold text-navy text-[11px] uppercase tracking-wider mb-2">
+      <div className="p-3 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-xl border border-white/80 dark:border-white/10 shadow-md text-xs transition-colors duration-200">
+        <div className="font-semibold text-navy dark:text-white text-[11px] uppercase tracking-wider mb-2">
           Meteorological Regimes
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1.5">
@@ -20,7 +20,9 @@ export const MapLegend: React.FC<MapLegendProps> = ({ layer }) => {
                 className="w-3 h-3 rounded-full shrink-0 shadow-xs"
                 style={{ backgroundColor: REGIME_COLORS[regime] }}
               />
-              <span className="text-slate-700 text-[11px] truncate">{regime}</span>
+              <span className="text-slate-700 dark:text-slate-300 text-[11px] truncate">
+                {regime}
+              </span>
             </div>
           ))}
         </div>
@@ -30,14 +32,16 @@ export const MapLegend: React.FC<MapLegendProps> = ({ layer }) => {
 
   if (layer === "transition") {
     return (
-      <div className="p-3 bg-white/95 backdrop-blur-xs rounded-xl border border-white/80 shadow-md text-xs">
-        <div className="font-semibold text-navy text-[11px] uppercase tracking-wider mb-2">
+      <div className="p-3 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-xl border border-white/80 dark:border-white/10 shadow-md text-xs transition-colors duration-200">
+        <div className="font-semibold text-navy dark:text-white text-[11px] uppercase tracking-wider mb-2">
           Transition Probability
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[11px] text-slate-500">Stable</span>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400">Stable</span>
           <div className="h-3 w-36 rounded-full bg-gradient-to-r from-slate-200 via-amber-300 to-purple-600 shadow-inner" />
-          <span className="text-[11px] font-semibold text-purple-700">Transition Hotspot (&gt;70%)</span>
+          <span className="text-[11px] font-semibold text-purple-700 dark:text-purple-400">
+            Transition Hotspot (&gt;70%)
+          </span>
         </div>
       </div>
     );
@@ -45,14 +49,16 @@ export const MapLegend: React.FC<MapLegendProps> = ({ layer }) => {
 
   if (layer === "uncertainty") {
     return (
-      <div className="p-3 bg-white/95 backdrop-blur-xs rounded-xl border border-white/80 shadow-md text-xs">
-        <div className="font-semibold text-navy text-[11px] uppercase tracking-wider mb-2">
+      <div className="p-3 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-xl border border-white/80 dark:border-white/10 shadow-md text-xs transition-colors duration-200">
+        <div className="font-semibold text-navy dark:text-white text-[11px] uppercase tracking-wider mb-2">
           Uncertainty Spread (P90 - P10)
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[11px] text-slate-500">Low (&lt;15mm)</span>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400">Low (&lt;15mm)</span>
           <div className="h-3 w-36 rounded-full bg-gradient-to-r from-blue-100 via-blue-400 to-indigo-900 shadow-inner" />
-          <span className="text-[11px] font-semibold text-indigo-900">High (&gt;80mm)</span>
+          <span className="text-[11px] font-semibold text-indigo-900 dark:text-indigo-400">
+            High (&gt;80mm)
+          </span>
         </div>
       </div>
     );
@@ -60,28 +66,30 @@ export const MapLegend: React.FC<MapLegendProps> = ({ layer }) => {
 
   // Rainfall Legend (Default)
   return (
-    <div className="p-3 bg-white/95 backdrop-blur-xs rounded-xl border border-white/80 shadow-md text-xs">
+    <div className="p-3 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-xl border border-white/80 dark:border-white/10 shadow-md text-xs transition-colors duration-200">
       <div className="flex items-center justify-between mb-1.5">
-        <span className="font-semibold text-navy text-[11px] uppercase tracking-wider">
+        <span className="font-semibold text-navy dark:text-white text-[11px] uppercase tracking-wider">
           Rainfall (24h)
         </span>
-        <span className="text-[10px] text-slate-400">IMD Standards</span>
+        <span className="text-[10px] text-slate-400 dark:text-slate-400">IMD Standards</span>
       </div>
       <div className="flex items-center gap-0.5">
         {PRECIPITATION_SCALE.map((item, idx) => (
           <div key={idx} className="flex flex-col items-center">
             <div
-              className="w-7 sm:w-8 h-3.5 first:rounded-l-md last:rounded-r-md border-y border-slate-200/50"
+              className="w-7 sm:w-8 h-3.5 first:rounded-l-md last:rounded-r-md border-y border-slate-200/50 dark:border-white/10"
               style={{ backgroundColor: item.color }}
               title={item.label}
             />
-            <span className="text-[9px] sm:text-[10px] text-slate-500 mt-1">
+            <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 mt-1">
               {item.min}
             </span>
           </div>
         ))}
-        <span className="text-[10px] text-slate-500 ml-1.5 font-medium">mm</span>
+        <span className="text-[10px] text-slate-500 dark:text-slate-400 ml-1.5 font-medium">mm</span>
       </div>
     </div>
   );
 };
+
+export default MapLegend;

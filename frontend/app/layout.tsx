@@ -26,8 +26,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-[#F3F8FC] text-[#0B2A4A] min-h-screen">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('raincor_theme');
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (stored === 'dark' || (!stored && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="bg-[#F3F8FC] dark:bg-[#0B0F19] text-[#0B2A4A] dark:text-[#F8FAFC] min-h-screen transition-colors duration-200">
         <Providers>
           <AppShell>{children}</AppShell>
         </Providers>

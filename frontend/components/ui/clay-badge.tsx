@@ -17,12 +17,18 @@ export const ClayBadge: React.FC<ClayBadgeProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    primary: "bg-[#EAF5FF] text-[#2F80D9] border-blue-200/60",
-    success: "bg-[#E8F8F0] text-[#1E8A5A] border-emerald-200/60",
-    warning: "bg-[#FEF6E8] text-[#D98218] border-amber-200/60",
-    danger: "bg-[#FDF0F0] text-[#D83838] border-rose-200/60",
-    purple: "bg-[#F3F0FA] text-[#6958CD] border-purple-200/60",
-    neutral: "bg-[#F1F5F9] text-[#475569] border-slate-200/60",
+    primary:
+      "bg-[#EAF5FF] dark:bg-blue-950/60 text-[#2F80D9] dark:text-sky-400 border-blue-200/60 dark:border-blue-800/60",
+    success:
+      "bg-[#E8F8F0] dark:bg-emerald-950/60 text-[#1E8A5A] dark:text-emerald-400 border-emerald-200/60 dark:border-emerald-800/60",
+    warning:
+      "bg-[#FEF6E8] dark:bg-amber-950/60 text-[#D98218] dark:text-amber-400 border-amber-200/60 dark:border-amber-800/60",
+    danger:
+      "bg-[#FDF0F0] dark:bg-rose-950/60 text-[#D83838] dark:text-rose-400 border-rose-200/60 dark:border-rose-800/60",
+    purple:
+      "bg-[#F3F0FA] dark:bg-purple-950/60 text-[#6958CD] dark:text-purple-400 border-purple-200/60 dark:border-purple-800/60",
+    neutral:
+      "bg-[#F1F5F9] dark:bg-slate-800/90 text-[#475569] dark:text-slate-300 border-slate-200/60 dark:border-slate-700/60",
   };
 
   const dotColors = {
@@ -42,14 +48,16 @@ export const ClayBadge: React.FC<ClayBadgeProps> = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)]",
+        "inline-flex items-center gap-1.5 rounded-full border shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-none",
         sizeStyles[size],
         variantStyles[variant],
         className
       )}
       {...props}
     >
-      {dot && <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", dotColors[variant])} />}
+      {dot && (
+        <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", dotColors[variant])} />
+      )}
       {children}
     </span>
   );

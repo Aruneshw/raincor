@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useThemeStore } from "@/store/theme-store";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -15,6 +16,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       })
   );
+
+  useEffect(() => {
+    useThemeStore.getState().initTheme();
+  }, []);
 
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

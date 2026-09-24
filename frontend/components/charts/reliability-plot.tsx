@@ -19,7 +19,7 @@ export const ReliabilityPlot: React.FC<ReliabilityPlotProps> = ({ bins, height =
       {
         label: "Perfect Calibration (1:1)",
         data: bins.map((b) => b.forecastProbability),
-        borderColor: "#CBD5E1",
+        borderColor: "#94A3B8",
         borderDash: [4, 4],
         borderWidth: 1.5,
         pointRadius: 0,
@@ -52,20 +52,26 @@ export const ReliabilityPlot: React.FC<ReliabilityPlotProps> = ({ bins, height =
     plugins: {
       legend: {
         position: "top" as const,
-        labels: { boxWidth: 12, usePointStyle: true, font: { size: 11 } },
+        labels: { boxWidth: 12, usePointStyle: true, font: { size: 11 }, color: "#94A3B8" },
       },
       tooltip: {
-        backgroundColor: "#0B2A4A",
+        backgroundColor: "#0F172A",
+        titleColor: "#F8FAFC",
+        bodyColor: "#F8FAFC",
+        borderColor: "rgba(255, 255, 255, 0.1)",
+        borderWidth: 1,
       },
     },
     scales: {
       x: {
-        title: { display: true, text: "Forecast Probability", color: "#64748B", font: { size: 11 } },
-        grid: { color: "#F1F5F9" },
+        title: { display: true, text: "Forecast Probability", color: "#94A3B8", font: { size: 11 } },
+        grid: { color: "rgba(148, 163, 184, 0.12)" },
+        ticks: { font: { size: 11 }, color: "#94A3B8" },
       },
       y: {
-        title: { display: true, text: "Observed Relative Frequency", color: "#64748B", font: { size: 11 } },
-        grid: { color: "#F1F5F9" },
+        title: { display: true, text: "Observed Relative Frequency", color: "#94A3B8", font: { size: 11 } },
+        grid: { color: "rgba(148, 163, 184, 0.12)" },
+        ticks: { font: { size: 11 }, color: "#94A3B8" },
         min: 0,
         max: 1.0,
       },
@@ -78,3 +84,5 @@ export const ReliabilityPlot: React.FC<ReliabilityPlotProps> = ({ bins, height =
     </div>
   );
 };
+
+export default ReliabilityPlot;

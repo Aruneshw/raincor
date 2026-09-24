@@ -18,8 +18,10 @@ export const ClayButton = React.forwardRef<HTMLButtonElement, ClayButtonProps>(
     const variantClasses = {
       primary: "clay-button-primary",
       secondary: "clay-button-secondary",
-      subtle: "bg-brand-blue-light text-brand-blue hover:bg-blue-100 font-medium",
-      outline: "border border-slate-200 bg-white/80 hover:bg-slate-50 text-navy font-medium",
+      subtle:
+        "bg-brand-blue-light dark:bg-brand-blue/20 text-brand-blue dark:text-sky-300 hover:bg-blue-100 dark:hover:bg-brand-blue/30 font-medium",
+      outline:
+        "border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700 text-navy dark:text-white font-medium",
       danger: "bg-weather-danger text-white shadow-sm hover:opacity-95 font-medium",
     };
 
