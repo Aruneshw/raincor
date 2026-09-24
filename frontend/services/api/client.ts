@@ -188,3 +188,5 @@ export const raincorApi = {
     );
   },
 };
+
+export const api = raincorApi;
