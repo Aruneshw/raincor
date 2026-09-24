@@ -1,12 +1,19 @@
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
+from ...services.met_service import met_service
+from ..schemas.verification import VerificationResponse
 
 router = APIRouter()
 
-@router.get("")
+@router.get("", response_model=VerificationResponse)
 async def get_verification():
-    return JSONResponse(status_code=501, content={"message": "Verification model not yet implemented"})
+    """
+    Returns standard meteorological contingency scores (CSI, ETS, POD, FAR, FSS, RMSE).
+    """
+    return met_service.get_verification()
 
-@router.get("/metrics")
+@router.get("/metrics", response_model=VerificationResponse)
 async def get_verification_metrics():
-    return JSONResponse(status_code=501, content={"message": "Verification metrics not yet implemented"})
+    """
+    Returns verification skill benchmarks comparing Raw NWP against AI models and RAINCOR.
+    """
+    return met_service.get_verification()

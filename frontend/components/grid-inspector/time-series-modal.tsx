@@ -13,19 +13,30 @@ export const TimeSeriesModal: React.FC = () => {
   const { selectedGridId, isTimeSeriesModalOpen, setTimeSeriesModalOpen } = useMapStore();
   const [data, setData] = useState<GridTimeSeriesResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    if (isTimeSeriesModalOpen && selectedGridId) {
+  const loadTimeSeries = React.useCallback(() => {
+    if (selectedGridId) {
       setIsLoading(true);
+      setHasError(false);
       raincorApi
         .getGridTimeSeries(selectedGridId)
         .then((res) => {
           setData(res);
           setIsLoading(false);
         })
-        .catch(() => setIsLoading(false));
+        .catch(() => {
+          setHasError(true);
+          setIsLoading(false);
+        });
     }
-  }, [isTimeSeriesModalOpen, selectedGridId]);
+  }, [selectedGridId]);
+
+  useEffect(() => {
+    if (isTimeSeriesModalOpen && selectedGridId) {
+      loadTimeSeries();
+    }
+  }, [isTimeSeriesModalOpen, selectedGridId, loadTimeSeries]);
 
   if (!isTimeSeriesModalOpen) return null;
 
@@ -65,8 +76,20 @@ export const TimeSeriesModal: React.FC = () => {
         {/* Modal Body */}
         <div className="py-4">
           {isLoading ? (
-            <div className="h-64 flex items-center justify-center text-slate-400 text-sm">
-              Loading timeseries data...
+            <div className="h-64 flex flex-col items-center justify-center text-slate-400 text-sm gap-2">
+              <div className="w-6 h-6 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+              <span>Loading timeseries data...</span>
+            </div>
+          ) : hasError ? (
+            <div className="h-64 flex flex-col items-center justify-center text-slate-400 text-sm gap-3">
+              <span className="text-rose-500 font-semibold">Failed to load grid time-series.</span>
+              <button
+                type="button"
+                onClick={loadTimeSeries}
+                className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold hover:bg-slate-200 transition-colors"
+              >
+                Retry Request
+              </button>
             </div>
           ) : data ? (
             <div>

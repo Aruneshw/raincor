@@ -15,11 +15,18 @@ export default function DataMonitorPage() {
 
   const loadData = () => {
     setRefreshing(true);
-    raincorApi.getDataMonitor().then((res) => {
-      setData(res);
-      setLoading(false);
-      setRefreshing(false);
-    });
+    raincorApi
+      .getDataMonitor()
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+        setRefreshing(false);
+      })
+      .catch((err) => {
+        console.error("Data monitor fetch error:", err);
+        setLoading(false);
+        setRefreshing(false);
+      });
   };
 
   useEffect(() => {

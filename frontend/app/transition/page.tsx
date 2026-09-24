@@ -19,10 +19,16 @@ export default function TransitionPage() {
   useEffect(() => {
     // Automatically switch map layer to transition
     setSelectedLayer("transition");
-    raincorApi.getTransitions().then((res) => {
-      setData(res);
-      setLoading(false);
-    });
+    raincorApi
+      .getTransitions()
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Transition fetch error:", err);
+        setLoading(false);
+      });
   }, [setSelectedLayer]);
 
   return (

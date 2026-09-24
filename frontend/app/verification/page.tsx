@@ -15,10 +15,16 @@ export default function VerificationPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    raincorApi.getVerification().then((res) => {
-      setData(res);
-      setLoading(false);
-    });
+    raincorApi
+      .getVerification()
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Verification fetch error:", err);
+        setLoading(false);
+      });
   }, []);
 
   const metrics: Array<{ id: typeof selectedMetric; label: string }> = [

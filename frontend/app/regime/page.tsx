@@ -20,10 +20,16 @@ export default function RegimePage() {
   useEffect(() => {
     // Automatically switch map layer to regime
     setSelectedLayer("regime");
-    raincorApi.getRegimeDistribution().then((res) => {
-      setData(res);
-      setLoading(false);
-    });
+    raincorApi
+      .getRegimeDistribution()
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Regime fetch error:", err);
+        setLoading(false);
+      });
   }, [setSelectedLayer]);
 
   return (

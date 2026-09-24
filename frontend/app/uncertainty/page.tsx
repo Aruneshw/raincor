@@ -20,10 +20,16 @@ export default function UncertaintyPage() {
   useEffect(() => {
     // Automatically switch map layer to uncertainty
     setSelectedLayer("uncertainty");
-    raincorApi.getUncertainty().then((res) => {
-      setData(res);
-      setLoading(false);
-    });
+    raincorApi
+      .getUncertainty()
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Uncertainty fetch error:", err);
+        setLoading(false);
+      });
   }, [setSelectedLayer]);
 
   return (

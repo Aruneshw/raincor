@@ -16,10 +16,16 @@ export default function ClimatologyPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    raincorApi.getClimatology().then((res) => {
-      setData(res);
-      setLoading(false);
-    });
+    raincorApi
+      .getClimatology()
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Climatology fetch error:", err);
+        setLoading(false);
+      });
   }, []);
 
   return (

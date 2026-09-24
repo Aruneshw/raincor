@@ -53,26 +53,47 @@ export default function DashboardPage() {
 
   const [forecast, setForecast] = useState<ForecastResponse | null>(null);
   const [regimes, setRegimes] = useState<RegimeResponse | null>(null);
+  const [alerts, setAlerts] = useState<OperationalAlert[]>(OPERATIONAL_ALERTS);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setLoading(true);
+    setError(null);
     Promise.all([
       raincorApi.getForecast(leadTime, displayMode),
       raincorApi.getRegimeDistribution(),
-    ]).then(([fRes, rRes]) => {
-      setForecast(fRes);
-      setRegimes(rRes);
-      setLoading(false);
-    });
+      raincorApi.getAlerts(),
+    ])
+      .then(([fRes, rRes, aRes]) => {
+        setForecast(fRes);
+        setRegimes(rRes);
+        if (aRes?.alerts && aRes.alerts.length > 0) {
+          setAlerts(aRes.alerts.slice(0, 5) as OperationalAlert[]);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Dashboard fetch error:", err);
+        setError("Failed to fetch latest forecast telemetry.");
+        setLoading(false);
+      });
   }, [leadTime, displayMode]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
+      {error && (
+        <div className="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs flex items-center justify-between">
+          <span>{error}</span>
+          <span className="text-[10px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full font-semibold">Offline Fallback Active</span>
+        </div>
+      )}
+
       {/* Top 4 Operational KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           title="Total Rainfall (24h)"
-          value="124.6"
+          value={forecast ? forecast.averageRainfallMm.toFixed(1) : "124.6"}
           unit="mm"
           change={{ value: "+18.2%", isPositive: true, label: "vs 30y Normal" }}
           icon={CloudRain}
@@ -81,7 +102,7 @@ export default function DashboardPage() {
 
         <KpiCard
           title="Heavy Rain Grids"
-          value="1,238"
+          value={forecast ? forecast.heavyRainGridsCount.toLocaleString() : "1,238"}
           unit="cells"
           change={{ value: "+8.4%", isPositive: true, label: "exceeding 64.5 mm" }}
           icon={AlertTriangle}
@@ -90,7 +111,7 @@ export default function DashboardPage() {
 
         <KpiCard
           title="Transitioning Grids"
-          value="417"
+          value={forecast ? forecast.transitionGridsCount.toLocaleString() : "417"}
           unit="cells"
           change={{ value: "24.6%", isPositive: true, label: "active regime shift" }}
           icon={Activity}
@@ -132,12 +153,12 @@ export default function DashboardPage() {
                 <h3 className="text-sm font-bold text-navy">Priority Operational Alerts</h3>
               </div>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
-                3 Active
+                {alerts.length} Active
               </span>
             </div>
 
             <div className="mt-3 space-y-2.5">
-              {OPERATIONAL_ALERTS.map((alert) => (
+              {alerts.map((alert) => (
                 <AlertCard key={alert.id} alert={alert} onSelectGrid={(id) => selectGrid(id)} />
               ))}
             </div>

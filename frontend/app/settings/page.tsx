@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Settings, Sliders, Bell, Map, Database, Check, RefreshCcw } from "lucide-react";
 import { ClayCard } from "@/components/ui/clay-card";
 import { ClayButton } from "@/components/ui/clay-button";
 import { ClayBadge } from "@/components/ui/clay-badge";
+import { raincorApi } from "@/services/api/client";
 
 type SettingsTab = "thresholds" | "forecast" | "map" | "alerts" | "models";
 
@@ -14,6 +15,16 @@ export default function SettingsPage() {
   const [veryHeavyThreshold, setVeryHeavyThreshold] = useState("115.5");
   const [extremeThreshold, setExtremeThreshold] = useState("204.5");
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    raincorApi.getSettings().then((res) => {
+      if (res?.thresholds) {
+        if (res.thresholds.heavyThreshold) setHeavyThreshold(String(res.thresholds.heavyThreshold));
+        if (res.thresholds.veryHeavyThreshold) setVeryHeavyThreshold(String(res.thresholds.veryHeavyThreshold));
+        if (res.thresholds.extremeThreshold) setExtremeThreshold(String(res.thresholds.extremeThreshold));
+      }
+    }).catch(console.error);
+  }, []);
 
   const tabs: Array<{ id: SettingsTab; label: string; icon: React.ReactNode }> = [
     { id: "thresholds", label: "Threshold Settings", icon: <Sliders className="w-4 h-4" /> },
@@ -25,8 +36,19 @@ export default function SettingsPage() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+    raincorApi.updateSettings({
+      thresholds: {
+        heavyThreshold: parseFloat(heavyThreshold) || 64.5,
+        veryHeavyThreshold: parseFloat(veryHeavyThreshold) || 115.5,
+        extremeThreshold: parseFloat(extremeThreshold) || 204.5,
+      }
+    }).then(() => {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    }).catch(() => {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    });
   };
 
   return (

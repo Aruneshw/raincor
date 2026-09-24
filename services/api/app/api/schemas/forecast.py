@@ -68,3 +68,21 @@ class GridTimeSeriesResponse(BaseModel):
     state: str
     district: str
     series: List[TimeSeriesPoint]
+
+class MapGeometry(BaseModel):
+    type: Literal["Polygon", "Point"]
+    coordinates: list
+
+class GeoJsonFeature(BaseModel):
+    type: Literal["Feature"] = "Feature"
+    id: str
+    geometry: MapGeometry
+    properties: GridCell
+
+class ForecastMapResponse(BaseModel):
+    type: Literal["FeatureCollection"] = "FeatureCollection"
+    timestamp: str
+    leadTime: ForecastLeadTime
+    displayMode: ForecastDisplayMode
+    totalFeatures: int
+    features: List[GeoJsonFeature]

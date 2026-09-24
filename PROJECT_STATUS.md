@@ -1,7 +1,7 @@
 ## Current Stage
-Atmospheric Transport Graph Layer completed. Added a PyTorch Geometric based Graph Neural Network (GNN) to explicitly model atmospheric advection. Evaluated the computational footprint via the benchmark module. Ready for downstream integration.
+Frontend-Backend Integration completed. Connected all completed backend modules (spatial grids, baselines, regime classification, transitions, quantiles, and error mechanisms) to the existing RainMind frontend via clean, typed, high-performance FastAPI endpoints with resilient fallbacks.
 
-## Completed Work (Stages 0-5)
+## Completed Work (Stages 0-7)
 - **Frontend Audit:** Inspected and stabilized the existing Next.js 14 frontend.
 - **Backend Setup:** Initialized the FastAPI backend structure at `services/api`.
 - **Backend Foundation:** Configured Pydantic settings, structured logging, global exception handling, and dependency injection.
@@ -11,6 +11,7 @@ Atmospheric Transport Graph Layer completed. Added a PyTorch Geometric based Gra
 - **Data Layer (Stage 4):** Built the `xarray`-powered data ingestion system at `services/data/`. Implemented interfaces for NWP (GRIB/NetCDF), observations (CSV/Parquet), time/coordinate normalization, missing-value interpolation, quality control flags, and extracted stacked feature tensors (Dynamic, Static, Temporal). Included synthetic datasets for testing.
 - **Baseline Corrections (Stage 5):** Built statistical correction benchmarks inside `services/ml/`. Implemented `RawNWPBaseline`, `ClimatologyBaseline`, `SimpleBiasCorrection`, and `EmpiricalQuantileMapping` using a standardized interface with parameter saving (`joblib`). Built a `MetricsEngine` calculating RMSE, MAE, Bias, POD, FAR, and CSI.
 - **Regime Classification (Stage 6):** Built `services/ml/regime/` containing Unsupervised Discovery (HDBSCAN/GMM) and Supervised Hierarchical Classification (LightGBM). Features cascading independent Heads (Season, Synoptic, Local), rigorous temperature scaling calibration, and analytical entropy/confidence metrics for capturing atmospheric uncertainty.
+- **Frontend-Backend Integration (Stage 7):** Connected FastAPI backend modules directly to the existing RainMind frontend. Built `MeteorologicalService` powering clean JSON responses for Dashboard, Rainfall Forecast, Regime Analysis, Transition Monitoring, Quantile Uncertainty, Verification Benchmarks, District Forecasts, Priority Alerts Feed, 72h Time-Series, Diagnostic Error Mechanisms, Climatology, System Health, and Operational Settings. Added robust loading and failure recovery states across the frontend.
 
 ## Stage Progression
 - [x] **Stage 0:** Repository Audit
@@ -20,3 +21,5 @@ Atmospheric Transport Graph Layer completed. Added a PyTorch Geometric based Gra
 - [x] **Stage 4:** Data Ingestion Pipeline
 - [x] **Stage 5:** Statistical Baselines & Evaluation
 - [x] **Stage 6:** Hierarchical Regime Classification
+- [x] **Stage 7:** Frontend-Backend Integration & Operational API Layer
+

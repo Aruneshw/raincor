@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from .forecast import RegimeType, ConfidenceLevel
 
 class TransitionHotspot(BaseModel):
@@ -22,8 +22,7 @@ class DominantTransition(BaseModel):
     count: int
     pct: float
     
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 class TransitionResponse(BaseModel):
     timestamp: str

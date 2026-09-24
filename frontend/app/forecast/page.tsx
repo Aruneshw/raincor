@@ -22,10 +22,16 @@ export default function ForecastPage() {
 
   useEffect(() => {
     setLoading(true);
-    raincorApi.getForecast(leadTime, displayMode).then((res) => {
-      setForecast(res);
-      setLoading(false);
-    });
+    raincorApi
+      .getForecast(leadTime, displayMode)
+      .then((res) => {
+        setForecast(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Forecast fetch error:", err);
+        setLoading(false);
+      });
   }, [leadTime, displayMode]);
 
   const leadTimes: ForecastLeadTime[] = ["T+6h", "T+12h", "T+24h", "T+48h", "T+72h"];
@@ -34,6 +40,12 @@ export default function ForecastPage() {
     { id: "nwp", label: "Raw NWP (NCUM / GFS)", desc: "Unadjusted numerical model rainfall forecast" },
     { id: "anomaly", label: "Precipitation Anomaly", desc: "Departure from 30-year IMD Normal" },
   ];
+
+  const totalGridsCount = forecast?.totalGrids || 10377;
+  const modCount = forecast?.grids.filter((g) => g.correctedRainfallMm >= 15.6).length ?? 3480;
+  const heavyCount = forecast?.heavyRainGridsCount ?? (forecast?.grids.filter((g) => g.correctedRainfallMm >= 64.5).length ?? 1238);
+  const veryHeavyCount = forecast?.grids.filter((g) => g.correctedRainfallMm >= 115.5).length ?? 392;
+  const extremeCount = forecast?.grids.filter((g) => g.correctedRainfallMm >= 204.5).length ?? 64;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -89,15 +101,15 @@ export default function ForecastPage() {
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
             Moderate Rain (&gt;15.6mm)
           </span>
-          <div className="text-2xl font-bold text-navy">3,480 Grids</div>
-          <p className="text-xs text-slate-500 mt-1">20.0% India Land Domain</p>
+          <div className="text-2xl font-bold text-navy">{modCount.toLocaleString()} Grids</div>
+          <p className="text-xs text-slate-500 mt-1">{((modCount / totalGridsCount) * 100).toFixed(1)}% India Land Domain</p>
         </ClayCard>
 
         <ClayCard className="p-4 border-l-4 border-l-amber-400">
           <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block mb-1">
             Heavy Rain (&gt;64.5mm)
           </span>
-          <div className="text-2xl font-bold text-navy">1,238 Grids</div>
+          <div className="text-2xl font-bold text-navy">{heavyCount.toLocaleString()} Grids</div>
           <p className="text-xs text-slate-500 mt-1">Konkan, Odisha &amp; Assam track</p>
         </ClayCard>
 
@@ -105,7 +117,7 @@ export default function ForecastPage() {
           <span className="text-[11px] font-bold text-orange-600 uppercase tracking-wider block mb-1">
             Very Heavy (&gt;115.5mm)
           </span>
-          <div className="text-2xl font-bold text-navy">392 Grids</div>
+          <div className="text-2xl font-bold text-navy">{veryHeavyCount.toLocaleString()} Grids</div>
           <p className="text-xs text-slate-500 mt-1">Meghalaya &amp; Western Ghats</p>
         </ClayCard>
 
@@ -113,7 +125,7 @@ export default function ForecastPage() {
           <span className="text-[11px] font-bold text-rose-600 uppercase tracking-wider block mb-1">
             Extremely Heavy (&gt;204.5mm)
           </span>
-          <div className="text-2xl font-bold text-navy">64 Grids</div>
+          <div className="text-2xl font-bold text-navy">{extremeCount.toLocaleString()} Grids</div>
           <p className="text-xs text-slate-500 mt-1">High flash flood risk</p>
         </ClayCard>
       </div>

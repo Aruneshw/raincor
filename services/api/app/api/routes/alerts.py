@@ -1,8 +1,19 @@
-from fastapi import APIRouter
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Query
+from ...services.met_service import met_service
+from ..schemas.alerts import AlertFeedResponse
 
 router = APIRouter()
 
-@router.get("")
+@router.get("", response_model=AlertFeedResponse)
 async def get_alerts():
-    return JSONResponse(status_code=501, content={"message": "Alerts model not yet implemented"})
+    """
+    Returns prioritized operational alerts (Heavy Rain, Rapid Transition, High Uncertainty).
+    """
+    return met_service.get_alerts(extreme_only=False)
+
+@router.get("/extreme", response_model=AlertFeedResponse)
+async def get_extreme_alerts():
+    """
+    Returns high-severity meteorological alerts exceeding critical IMD thresholds.
+    """
+    return met_service.get_alerts(extreme_only=True)
