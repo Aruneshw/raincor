@@ -26,15 +26,15 @@ import { MapToolbar } from "./map-toolbar";
 
 // Static RGB Tuples for Instant O(1) Color Lookups without String Parsing
 const REGIME_COLORS_RGB: Record<string, [number, number, number, number]> = {
-  "Active Monsoon": [34, 197, 94, 190],
-  "Break Monsoon": [234, 179, 8, 190],
-  "Monsoon Low / Depression": [59, 130, 246, 190],
-  "Western Disturbance": [168, 85, 247, 190],
-  "Orographic": [20, 184, 166, 190],
-  "Coastal": [6, 182, 212, 190],
-  "Post-Monsoon / Northeast": [249, 115, 22, 190],
+  "Active Monsoon": [34, 197, 94, 140],
+  "Break Monsoon": [234, 179, 8, 140],
+  "Monsoon Low / Depression": [59, 130, 246, 140],
+  "Western Disturbance": [168, 85, 247, 140],
+  "Orographic": [20, 184, 166, 140],
+  "Coastal": [6, 182, 212, 140],
+  "Post-Monsoon / Northeast": [249, 115, 22, 140],
 };
-const DEFAULT_REGIME_RGB: [number, number, number, number] = [100, 116, 139, 180];
+const DEFAULT_REGIME_RGB: [number, number, number, number] = [100, 116, 139, 120];
 
 // High-fidelity IMD Doppler Radar Precipitation Palette
 const DOPPLER_HEATMAP_COLORS: [number, number, number][] = [
@@ -341,9 +341,9 @@ export const DeckMap: React.FC = () => {
         data: animatedGrids,
         getPosition: (d) => [d.lon, d.lat],
         getWeight: (d) => getRainfall(d),
-        radiusPixels: 48,
-        intensity: 1.25,
-        threshold: 0.035,
+        radiusPixels: 64,
+        intensity: 0.9,
+        threshold: 0.05,
         colorDomain: [0, 140],
         debounceTimeout: 20,
         aggregation: "SUM",
@@ -361,8 +361,11 @@ export const DeckMap: React.FC = () => {
               id: "grid-choropleth",
               data: animatedGridGeoJson,
               pickable: true,
-              stroked: false,
+              stroked: true,
               filled: true,
+              lineWidthMinPixels: 0.5,
+              getLineColor: [255, 255, 255, 30],
+              getLineWidth: 200,
               getFillColor: (f: any) => {
                 const g = f.properties as GridCell;
                 if (selectedLayer === "regime") {
@@ -370,15 +373,15 @@ export const DeckMap: React.FC = () => {
                 }
                 if (selectedLayer === "transition") {
                   const p = g.transitionProbability || 0;
-                  if (!g.isTransitioning) return [100, 100, 120, 35];
-                  return [120 + p * 80, 50, 200, Math.round(90 + p * 165)];
+                  if (!g.isTransitioning) return [100, 100, 120, 20];
+                  return [120 + p * 80, 50, 200, Math.round(70 + p * 140)];
                 }
                 // Uncertainty spread: P90 - P10
                 const spread = g.p90Mm - g.p10Mm;
-                if (spread < 20) return [200, 230, 250, 110];
-                if (spread < 50) return [100, 180, 240, 160];
-                if (spread < 90) return [20, 100, 200, 200];
-                return [50, 20, 130, 230];
+                if (spread < 20) return [200, 230, 250, 70];
+                if (spread < 50) return [100, 180, 240, 110];
+                if (spread < 90) return [20, 100, 200, 150];
+                return [50, 20, 130, 190];
               },
               onClick: handleGridClick,
               onHover: handleGridHover,

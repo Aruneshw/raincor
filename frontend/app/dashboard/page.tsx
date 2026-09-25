@@ -7,6 +7,7 @@ import { AlertCard, OperationalAlert } from "@/components/cards/alert-card";
 import { IndiaMap } from "@/components/maps/india-map";
 import { GridInspector } from "@/components/grid-inspector/grid-inspector";
 import { RainfallChart } from "@/components/charts/rainfall-chart";
+import { PrototypeEvidenceChart } from "@/components/charts/prototype-evidence-chart";
 import { RegimeDistChart } from "@/components/charts/regime-dist-chart";
 import { arjunaApi } from "@/services/api/client";
 import { ForecastResponse } from "@/types/forecast";
@@ -141,6 +142,11 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+
+      {/* Supporting Operational Sections: Prototype Evidence */}
+      <ClayCard className="p-6">
+        <PrototypeEvidenceChart height={300} />
+      </ClayCard>
 
       {/* Supporting Operational Sections: Realtime Alerts & Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
