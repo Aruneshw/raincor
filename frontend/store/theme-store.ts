@@ -14,7 +14,7 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   setTheme: (theme: ThemeMode) => {
     if (typeof window !== "undefined") {
       try {
-        localStorage.setItem("raincor_theme", theme);
+        localStorage.setItem("arjuna_theme", theme);
         if (theme === "dark") {
           document.documentElement.classList.add("dark");
         } else {
@@ -33,7 +33,7 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   initTheme: () => {
     if (typeof window !== "undefined") {
       try {
-        const stored = localStorage.getItem("raincor_theme") as ThemeMode | null;
+        const stored = localStorage.getItem("arjuna_theme") as ThemeMode | null;
         if (stored === "dark" || stored === "light") {
           get().setTheme(stored);
         } else {

@@ -5,7 +5,7 @@ import { Settings, Sliders, Bell, Map, Database, Check, RefreshCcw } from "lucid
 import { ClayCard } from "@/components/ui/clay-card";
 import { ClayButton } from "@/components/ui/clay-button";
 import { ClayBadge } from "@/components/ui/clay-badge";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 
 type SettingsTab = "thresholds" | "forecast" | "map" | "alerts" | "models";
 
@@ -17,7 +17,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    raincorApi.getSettings().then((res) => {
+    arjunaApi.getSettings().then((res) => {
       if (res?.thresholds) {
         if (res.thresholds.heavyThreshold) setHeavyThreshold(String(res.thresholds.heavyThreshold));
         if (res.thresholds.veryHeavyThreshold) setVeryHeavyThreshold(String(res.thresholds.veryHeavyThreshold));
@@ -36,7 +36,7 @@ export default function SettingsPage() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    raincorApi.updateSettings({
+    arjunaApi.updateSettings({
       thresholds: {
         heavyThreshold: parseFloat(heavyThreshold) || 64.5,
         veryHeavyThreshold: parseFloat(veryHeavyThreshold) || 115.5,
@@ -249,7 +249,7 @@ export default function SettingsPage() {
                 <h3 className="text-base font-bold text-navy">Mixture-of-Experts (MoE) Architecture</h3>
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                   <p className="text-slate-600">
-                    The RAINCOR platform deploys 7 regime-specialized expert neural networks (Active, Break, Low/Depression, Orographic, Coastal, Western Disturbance, General).
+                    The ARJUNA platform deploys 7 regime-specialized expert neural networks (Active, Break, Low/Depression, Orographic, Coastal, Western Disturbance, General).
                   </p>
                   <div className="mt-2 p-2.5 rounded-lg bg-blue-50 border border-blue-200 text-brand-blue font-mono text-[11px]">
                     Gating Network: Softmax Gating with Shannon Entropy Regularization

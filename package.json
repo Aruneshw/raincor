@@ -1,8 +1,8 @@
 {
-  "name": "raincor-workspace",
+  "name": "arjuna-workspace",
   "version": "1.0.0",
   "private": true,
-  "description": "RAINCOR — India Monsoon Intelligence & Weather Forecasting Operational Platform",
+  "description": "ARJUNA — India Monsoon Intelligence & Weather Forecasting Operational Platform",
   "scripts": {
     "dev": "npm run dev --prefix frontend",
     "build": "npm run build --prefix frontend",

@@ -8,7 +8,7 @@ import { ClayCard } from "@/components/ui/clay-card";
 import { ClayBadge } from "@/components/ui/clay-badge";
 import { UncertaintyCard } from "@/components/cards/uncertainty-card";
 import { useMapStore } from "@/store/map-store";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { UncertaintyResponse } from "@/types/uncertainty";
 import { formatRainfall } from "@/lib/formatting";
 
@@ -20,7 +20,7 @@ export default function UncertaintyPage() {
   useEffect(() => {
     // Automatically switch map layer to uncertainty
     setSelectedLayer("uncertainty");
-    raincorApi
+    arjunaApi
       .getUncertainty()
       .then((res) => {
         setData(res);

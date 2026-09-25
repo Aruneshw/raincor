@@ -26,8 +26,8 @@ export const ReliabilityPlot: React.FC<ReliabilityPlotProps> = ({ bins, height =
         fill: false,
       },
       {
-        label: "RAINCOR (Calibrated)",
-        data: bins.map((b) => b.observedFrequencyRaincor),
+        label: "ARJUNA (Calibrated)",
+        data: bins.map((b) => b.observedFrequencyArjuna),
         borderColor: "#2F80D9",
         backgroundColor: "#2F80D9",
         borderWidth: 2.5,

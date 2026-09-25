@@ -39,10 +39,10 @@ async function apiFetch<T>(endpoint: string, fallbackFn: () => Promise<T>, optio
 }
 
 /**
- * Universal Raincor API Client
+ * Universal Arjuna API Client
  * Seamlessly routes to FastAPI backend when configured, with graceful fallback.
  */
-export const raincorApi = {
+export const arjunaApi = {
   // Forecast Services
   getForecast: async (
     leadTime: ForecastLeadTime = "T+24h",
@@ -158,9 +158,9 @@ export const raincorApi = {
   getModels: async (): Promise<any> => {
     return apiFetch("/api/v1/system/models", async () => ({
       timestamp: new Date().toISOString(),
-      activePipeline: "RAINCOR Operational Pipeline",
+      activePipeline: "ARJUNA Operational Pipeline",
       models: [
-        { id: "mdl_raincor_moe", name: "RAINCOR MoE", version: "v2.4", status: "ACTIVE" },
+        { id: "mdl_arjuna_moe", name: "ARJUNA MoE", version: "v2.4", status: "ACTIVE" },
         { id: "mdl_lgbm_regime", name: "Hierarchical Classifier", version: "v1.8", status: "ACTIVE" },
       ],
     }));
@@ -189,4 +189,4 @@ export const raincorApi = {
   },
 };
 
-export const api = raincorApi;
+export const api = arjunaApi;

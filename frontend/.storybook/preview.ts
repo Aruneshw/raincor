@@ -11,9 +11,9 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: "raincor",
+      default: "arjuna",
       values: [
-        { name: "raincor", value: "#F3F8FC" },
+        { name: "arjuna", value: "#F3F8FC" },
         { name: "white", value: "#FFFFFF" },
       ],
     },

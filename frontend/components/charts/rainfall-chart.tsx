@@ -32,7 +32,7 @@ export const RainfallChart: React.FC<RainfallChartProps> = ({
         tension: 0.25,
       },
       {
-        label: "RAINCOR (Bias-Corrected)",
+        label: "ARJUNA (Bias-Corrected)",
         data: series.map((s) => s.correctedMm),
         borderColor: "#2F80D9",
         backgroundColor: "rgba(47, 128, 217, 0.12)",

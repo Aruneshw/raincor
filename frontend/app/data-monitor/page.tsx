@@ -5,7 +5,7 @@ import { Database, Radio, CheckCircle, AlertTriangle, Clock, RefreshCw, Server, 
 import { ClayCard } from "@/components/ui/clay-card";
 import { ClayBadge } from "@/components/ui/clay-badge";
 import { ClayButton } from "@/components/ui/clay-button";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { DataMonitorResponse } from "@/types/data-monitor";
 
 export default function DataMonitorPage() {
@@ -15,7 +15,7 @@ export default function DataMonitorPage() {
 
   const loadData = () => {
     setRefreshing(true);
-    raincorApi
+    arjunaApi
       .getDataMonitor()
       .then((res) => {
         setData(res);

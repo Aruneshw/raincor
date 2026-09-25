@@ -589,7 +589,7 @@ class MeteorologicalService:
         """Returns standard IMD categorical scores and benchmark comparisons."""
         models = [
             ModelMetricSet(
-                modelName="RAINCOR (Regime-Aware)",
+                modelName="ARJUNA (Regime-Aware)",
                 rmse=14.8, ets=0.54, csi=0.62, pod=0.84, far=0.28, fss=0.88, biasRatio=1.04
             ),
             ModelMetricSet(
@@ -607,30 +607,30 @@ class MeteorologicalService:
         ]
 
         thresholds = [
-            ThresholdSkillScore(thresholdMm=15.6, thresholdLabel="Moderate (≥15.6 mm)", nwpCsi=0.58, mlCsi=0.66, moeCsi=0.71, raincorCsi=0.76),
-            ThresholdSkillScore(thresholdMm=64.5, thresholdLabel="Heavy (≥64.5 mm)", nwpCsi=0.44, mlCsi=0.51, moeCsi=0.57, raincorCsi=0.62),
-            ThresholdSkillScore(thresholdMm=115.5, thresholdLabel="Very Heavy (≥115.5 mm)", nwpCsi=0.28, mlCsi=0.36, moeCsi=0.43, raincorCsi=0.50),
-            ThresholdSkillScore(thresholdMm=204.5, thresholdLabel="Extremely Heavy (≥204.5 mm)", nwpCsi=0.16, mlCsi=0.24, moeCsi=0.31, raincorCsi=0.41),
+            ThresholdSkillScore(thresholdMm=15.6, thresholdLabel="Moderate (≥15.6 mm)", nwpCsi=0.58, mlCsi=0.66, moeCsi=0.71, arjunaCsi=0.76),
+            ThresholdSkillScore(thresholdMm=64.5, thresholdLabel="Heavy (≥64.5 mm)", nwpCsi=0.44, mlCsi=0.51, moeCsi=0.57, arjunaCsi=0.62),
+            ThresholdSkillScore(thresholdMm=115.5, thresholdLabel="Very Heavy (≥115.5 mm)", nwpCsi=0.28, mlCsi=0.36, moeCsi=0.43, arjunaCsi=0.50),
+            ThresholdSkillScore(thresholdMm=204.5, thresholdLabel="Extremely Heavy (≥204.5 mm)", nwpCsi=0.16, mlCsi=0.24, moeCsi=0.31, arjunaCsi=0.41),
         ]
 
         reliability = [
-            ReliabilityBin(forecastProbability=0.1, observedFrequencyNwp=0.18, observedFrequencyRaincor=0.11, sampleCount=1420),
-            ReliabilityBin(forecastProbability=0.2, observedFrequencyNwp=0.31, observedFrequencyRaincor=0.22, sampleCount=1250),
-            ReliabilityBin(forecastProbability=0.3, observedFrequencyNwp=0.44, observedFrequencyRaincor=0.32, sampleCount=980),
-            ReliabilityBin(forecastProbability=0.4, observedFrequencyNwp=0.52, observedFrequencyRaincor=0.41, sampleCount=810),
-            ReliabilityBin(forecastProbability=0.5, observedFrequencyNwp=0.61, observedFrequencyRaincor=0.51, sampleCount=750),
-            ReliabilityBin(forecastProbability=0.6, observedFrequencyNwp=0.73, observedFrequencyRaincor=0.62, sampleCount=620),
-            ReliabilityBin(forecastProbability=0.7, observedFrequencyNwp=0.82, observedFrequencyRaincor=0.71, sampleCount=540),
-            ReliabilityBin(forecastProbability=0.8, observedFrequencyNwp=0.89, observedFrequencyRaincor=0.81, sampleCount=410),
-            ReliabilityBin(forecastProbability=0.9, observedFrequencyNwp=0.94, observedFrequencyRaincor=0.91, sampleCount=290),
+            ReliabilityBin(forecastProbability=0.1, observedFrequencyNwp=0.18, observedFrequencyArjuna=0.11, sampleCount=1420),
+            ReliabilityBin(forecastProbability=0.2, observedFrequencyNwp=0.31, observedFrequencyArjuna=0.22, sampleCount=1250),
+            ReliabilityBin(forecastProbability=0.3, observedFrequencyNwp=0.44, observedFrequencyArjuna=0.32, sampleCount=980),
+            ReliabilityBin(forecastProbability=0.4, observedFrequencyNwp=0.52, observedFrequencyArjuna=0.41, sampleCount=810),
+            ReliabilityBin(forecastProbability=0.5, observedFrequencyNwp=0.61, observedFrequencyArjuna=0.51, sampleCount=750),
+            ReliabilityBin(forecastProbability=0.6, observedFrequencyNwp=0.73, observedFrequencyArjuna=0.62, sampleCount=620),
+            ReliabilityBin(forecastProbability=0.7, observedFrequencyNwp=0.82, observedFrequencyArjuna=0.71, sampleCount=540),
+            ReliabilityBin(forecastProbability=0.8, observedFrequencyNwp=0.89, observedFrequencyArjuna=0.81, sampleCount=410),
+            ReliabilityBin(forecastProbability=0.9, observedFrequencyNwp=0.94, observedFrequencyArjuna=0.91, sampleCount=290),
         ]
 
         lead_evolution = [
-            LeadTimeEvolutionPoint(leadTime="T+6h", nwpRmse=18.2, raincorRmse=9.8, csiGainPct=24.2),
-            LeadTimeEvolutionPoint(leadTime="T+12h", nwpRmse=21.4, raincorRmse=11.9, csiGainPct=22.8),
-            LeadTimeEvolutionPoint(leadTime="T+24h", nwpRmse=26.4, raincorRmse=14.8, csiGainPct=20.5),
-            LeadTimeEvolutionPoint(leadTime="T+48h", nwpRmse=34.1, raincorRmse=21.2, csiGainPct=17.9),
-            LeadTimeEvolutionPoint(leadTime="T+72h", nwpRmse=43.6, raincorRmse=29.5, csiGainPct=14.8),
+            LeadTimeEvolutionPoint(leadTime="T+6h", nwpRmse=18.2, arjunaRmse=9.8, csiGainPct=24.2),
+            LeadTimeEvolutionPoint(leadTime="T+12h", nwpRmse=21.4, arjunaRmse=11.9, csiGainPct=22.8),
+            LeadTimeEvolutionPoint(leadTime="T+24h", nwpRmse=26.4, arjunaRmse=14.8, csiGainPct=20.5),
+            LeadTimeEvolutionPoint(leadTime="T+48h", nwpRmse=34.1, arjunaRmse=21.2, csiGainPct=17.9),
+            LeadTimeEvolutionPoint(leadTime="T+72h", nwpRmse=43.6, arjunaRmse=29.5, csiGainPct=14.8),
         ]
 
         return VerificationResponse(
@@ -894,7 +894,7 @@ class MeteorologicalService:
     def get_models_registry(self) -> ModelRegistryResponse:
         """Returns the registered machine learning and numerical weather prediction models."""
         models = [
-            ModelInfo(id="mdl_raincor_moe", name="RAINCOR Regime-Aware Mixture-of-Experts", version="v2.4", type="MoE + GNN Advection", status="ACTIVE", rmse=14.8, csi=0.62, latencyMs=84.2, description="Sparse gated expert mixture with atmospheric transport graph layer"),
+            ModelInfo(id="mdl_arjuna_moe", name="ARJUNA Regime-Aware Mixture-of-Experts", version="v2.4", type="MoE + GNN Advection", status="ACTIVE", rmse=14.8, csi=0.62, latencyMs=84.2, description="Sparse gated expert mixture with atmospheric transport graph layer"),
             ModelInfo(id="mdl_lgbm_regime", name="Hierarchical Regime Classifier", version="v1.8", type="LightGBM + Temperature Scaling", status="ACTIVE", rmse=19.5, csi=0.51, latencyMs=12.4, description="Multiclass hierarchical regime head with calibrated Shannon entropy"),
             ModelInfo(id="mdl_qm_baseline", name="Empirical Quantile Mapping", version="v1.2", type="Non-Parametric QM", status="ACTIVE", rmse=18.1, csi=0.54, latencyMs=4.6, description="Local intensity scaling with non-parametric quantile mapping"),
             ModelInfo(id="mdl_nwp_ncum", name="NCMRWF NCUM Global Model", version="v6.1", type="Numerical Weather Prediction", status="ACTIVE", rmse=26.4, csi=0.44, latencyMs=320.0, description="12km operational deterministic NWP model baseline"),
@@ -902,7 +902,7 @@ class MeteorologicalService:
 
         return ModelRegistryResponse(
             timestamp=datetime.now(timezone.utc).isoformat(),
-            activePipeline="RAINCOR Operational Pipeline (NCUM + MoE + GNN)",
+            activePipeline="ARJUNA Operational Pipeline (NCUM + MoE + GNN)",
             models=models,
         )
 

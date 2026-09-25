@@ -7,7 +7,7 @@ import { GridInspector } from "@/components/grid-inspector/grid-inspector";
 import { ClayCard } from "@/components/ui/clay-card";
 import { ClayBadge } from "@/components/ui/clay-badge";
 import { useMapStore } from "@/store/map-store";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { TransitionResponse, TransitionHotspot } from "@/types/transition";
 import { formatLatLon } from "@/lib/formatting";
 
@@ -19,7 +19,7 @@ export default function TransitionPage() {
   useEffect(() => {
     // Automatically switch map layer to transition
     setSelectedLayer("transition");
-    raincorApi
+    arjunaApi
       .getTransitions()
       .then((res) => {
         setData(res);

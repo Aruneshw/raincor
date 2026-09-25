@@ -1,4 +1,4 @@
-# RAINCOR — India Monsoon Intelligence & Rainfall Forecasting Platform
+# ARJUNA — India Monsoon Intelligence & Rainfall Forecasting Platform
 
 > **Regime-Aware AI Post-Processing of Monsoon Rainfall Forecasts**  
 > Operational weather intelligence system developed to Ministry of Earth Sciences (MoES), NCMRWF, and India Meteorological Department (IMD) standards.
@@ -7,9 +7,9 @@
 
 ## 1. Project Overview
 
-**RAINCOR** is an India-focused operational meteorological forecasting platform designed for meteorologists, weather researchers, and control-room operators. 
+**ARJUNA** is an India-focused operational meteorological forecasting platform designed for meteorologists, weather researchers, and control-room operators. 
 
-Numerical Weather Prediction (NWP) models (e.g., NCUM, GFS, ECMWF) exhibit systematic bias across diverse Indian weather regimes—such as active monsoon phases, break periods, low-pressure depressions, orographic barriers along the Western Ghats, and western disturbances. RAINCOR solves this problem by:
+Numerical Weather Prediction (NWP) models (e.g., NCUM, GFS, ECMWF) exhibit systematic bias across diverse Indian weather regimes—such as active monsoon phases, break periods, low-pressure depressions, orographic barriers along the Western Ghats, and western disturbances. ARJUNA solves this problem by:
 1. Dynamically classifying 0.25° grid cells across the Indian landmass into **7 distinct meteorological regimes**.
 2. Applying **adaptive regime-aware AI post-processing** and Mixture-of-Experts (MoE) routing to raw NWP forecasts.
 3. Quantifying forecast uncertainty with **P10, P50, and P90 quantile prediction intervals** and Shannon entropy.
@@ -22,11 +22,11 @@ Numerical Weather Prediction (NWP) models (e.g., NCUM, GFS, ECMWF) exhibit syste
 | Page | Route | Description |
 | :--- | :--- | :--- |
 | **Operational Dashboard** | `/dashboard` | India rainfall overview, 4 core KPI cards, interactive 17,415 grid map, priority operational alerts, and regime distribution visualizer. |
-| **Precipitation Forecast** | `/forecast` | Lead-time controls (T+6h to T+72h), model comparison (Raw NWP vs RAINCOR vs Anomaly), and operational threshold exceedance counts (Moderate, Heavy, Very Heavy, Extreme). |
+| **Precipitation Forecast** | `/forecast` | Lead-time controls (T+6h to T+72h), model comparison (Raw NWP vs ARJUNA vs Anomaly), and operational threshold exceedance counts (Moderate, Heavy, Very Heavy, Extreme). |
 | **Regime Analysis** | `/regime` | Spatial mapping of the 7 Indian monsoon regimes, dynamic regime probability breakdown, and 72-hour Markov transition matrix. |
 | **Transition Monitor** | `/transition` | High-priority surveillance of regime shift hotspots, NWP regime lag tracking (+6h delay identification), and neighbour spatial consistency index. |
 | **Uncertainty Quantification** | `/uncertainty` | P10–P90 quantile interval surfaces, Shannon classification entropy, and confidence distributions across subdivisions. |
-| **Model Verification** | `/verification` | Scientific verification scores (**CSI, ETS, POD, FAR, FSS, RMSE**) comparing NWP, ML baseline, MoE, and RAINCOR, including probability calibration reliability curves. |
+| **Model Verification** | `/verification` | Scientific verification scores (**CSI, ETS, POD, FAR, FSS, RMSE**) comparing NWP, ML baseline, MoE, and ARJUNA, including probability calibration reliability curves. |
 | **Monsoon Climatology** | `/climatology` | All-India Monsoon Rainfall (AIMR) tracking against 30-year IMD normals (1991–2020) and subdivision departure categorizations. |
 | **Data Feed Monitor** | `/data-monitor` | Health telemetry, latency, record counts, and quality assurance logs across NWP, IMD AWS, INSAT-3D/3DR QPE, and reanalysis. |
 | **System Settings** | `/settings` | Operational threshold customization (64.5mm, 115.5mm, 204.5mm), Mapbox settings, alert dispatch rules, and model routing. |
@@ -69,8 +69,8 @@ The user interface follows a professional, human-designed meteorological control
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/raincor.git
-cd raincor
+git clone https://github.com/your-org/arjuna.git
+cd arjuna
 
 # Install dependencies
 npm install
@@ -120,7 +120,7 @@ npm start
 ## 7. Directory Structure
 
 ```
-raincor/
+arjuna/
 ├── .github/workflows/ci.yml       # GitHub Actions CI automated pipeline
 ├── .storybook/                    # Storybook config (main.ts, preview.ts)
 ├── app/                           # Next.js App Router pages
@@ -168,7 +168,7 @@ raincor/
 The frontend architecture strictly isolates data access behind `services/api/client.ts`. When the Python / FastAPI machine learning services are deployed, simply provide the backend endpoint in your `.env.local`:
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=https://api.raincor.gov.in
+NEXT_PUBLIC_API_BASE_URL=https://api.arjuna.gov.in
 ```
 
 The client will automatically route all requests to the following REST endpoints:
@@ -185,7 +185,7 @@ The client will automatically route all requests to the following REST endpoints
 
 ## 9. Vercel Deployment
 
-RAINCOR is zero-config ready for Vercel deployment:
+ARJUNA is zero-config ready for Vercel deployment:
 1. Push your repository to GitHub.
 2. In Vercel, import the repository.
 3. Framework Preset: **Next.js**.

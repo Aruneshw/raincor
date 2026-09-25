@@ -8,7 +8,7 @@ import { IndiaMap } from "@/components/maps/india-map";
 import { GridInspector } from "@/components/grid-inspector/grid-inspector";
 import { RainfallChart } from "@/components/charts/rainfall-chart";
 import { RegimeDistChart } from "@/components/charts/regime-dist-chart";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { ForecastResponse } from "@/types/forecast";
 import { RegimeResponse } from "@/types/regime";
 import { useMapStore } from "@/store/map-store";
@@ -61,9 +61,9 @@ export default function DashboardPage() {
     setLoading(true);
     setError(null);
     Promise.all([
-      raincorApi.getForecast(leadTime, displayMode),
-      raincorApi.getRegimeDistribution(),
-      raincorApi.getAlerts(),
+      arjunaApi.getForecast(leadTime, displayMode),
+      arjunaApi.getRegimeDistribution(),
+      arjunaApi.getAlerts(),
     ])
       .then(([fRes, rRes, aRes]) => {
         setForecast(fRes);

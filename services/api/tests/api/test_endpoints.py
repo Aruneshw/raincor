@@ -75,10 +75,10 @@ def test_verification_metrics(client: TestClient):
     response = client.get("/api/v1/verification/metrics")
     assert response.status_code == 200
     data = response.json()
-    raincor = next(m for m in data["models"] if "RAINCOR" in m["modelName"])
+    arjuna = next(m for m in data["models"] if "ARJUNA" in m["modelName"])
     nwp = next(m for m in data["models"] if "Raw NWP" in m["modelName"])
-    assert raincor["csi"] > nwp["csi"]
-    assert raincor["rmse"] < nwp["rmse"]
+    assert arjuna["csi"] > nwp["csi"]
+    assert arjuna["rmse"] < nwp["rmse"]
 
 def test_district_forecast(client: TestClient):
     response = client.get("/api/v1/district/forecast")

@@ -15,13 +15,13 @@ export interface ThresholdSkillScore {
   nwpCsi: number;
   mlCsi: number;
   moeCsi: number;
-  raincorCsi: number;
+  arjunaCsi: number;
 }
 
 export interface ReliabilityBin {
   forecastProbability: number; // e.g. 0.1, 0.2 ... 0.9
   observedFrequencyNwp: number;
-  observedFrequencyRaincor: number;
+  observedFrequencyArjuna: number;
   sampleCount: number;
 }
 
@@ -34,7 +34,7 @@ export interface VerificationResponse {
   leadTimeEvolution: Array<{
     leadTime: string;
     nwpRmse: number;
-    raincorRmse: number;
+    arjunaRmse: number;
     csiGainPct: number;
   }>;
 }

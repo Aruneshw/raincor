@@ -14,6 +14,6 @@ async def get_verification():
 @router.get("/metrics", response_model=VerificationResponse)
 async def get_verification_metrics():
     """
-    Returns verification skill benchmarks comparing Raw NWP against AI models and RAINCOR.
+    Returns verification skill benchmarks comparing Raw NWP against AI models and ARJUNA.
     """
     return met_service.get_verification()

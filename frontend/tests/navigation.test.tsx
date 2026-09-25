@@ -8,10 +8,10 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe("Sidebar Navigation", () => {
-  it("renders RAINCOR brand and all operational navigation links", () => {
+  it("renders ARJUNA brand and all operational navigation links", () => {
     render(<Sidebar />);
 
-    expect(screen.getByText("RAINCOR")).toBeInTheDocument();
+    expect(screen.getByText("ARJUNA")).toBeInTheDocument();
     expect(screen.getByText("Monsoon Intelligence for India")).toBeInTheDocument();
 
     // Check main navigation items

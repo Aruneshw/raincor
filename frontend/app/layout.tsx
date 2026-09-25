@@ -5,7 +5,7 @@ import { Providers } from "@/components/providers";
 import { AppShell } from "@/components/layout/app-shell";
 
 export const metadata: Metadata = {
-  title: "RAINCOR | India Rainfall Monitoring & Weather Intelligence",
+  title: "ARJUNA | India Rainfall Monitoring & Weather Intelligence",
   description:
     "India-focused operational rainfall forecasting and regime intelligence platform (NWP + AI + Regime Post-Processing + Adaptive Bias Correction)",
   keywords: [
@@ -33,7 +33,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var stored = localStorage.getItem('raincor_theme');
+                  var stored = localStorage.getItem('arjuna_theme');
                   var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                   if (stored === 'dark' || (!stored && prefersDark)) {
                     document.documentElement.classList.add('dark');

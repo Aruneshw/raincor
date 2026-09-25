@@ -71,7 +71,7 @@ export const Sidebar: React.FC = () => {
         <div>
           <div className="flex items-center gap-1.5">
             <span className="text-xl font-extrabold tracking-tight text-navy dark:text-white">
-              RAINCOR
+              ARJUNA
             </span>
             <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-blue-100 dark:bg-blue-900/60 text-brand-blue dark:text-blue-300 font-bold">
               v0.1

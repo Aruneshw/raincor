@@ -1,4 +1,4 @@
-# Frontend Audit Report: RainMind (Raincor)
+# Frontend Audit Report: RainMind (Arjuna)
 
 ## Overview
 The frontend repository (`frontend/`) is a comprehensive operational meteorological dashboard built with Next.js 14. It is designed to visualize 0.25° grid-based rainfall forecasts and regime classifications across the Indian landmass.

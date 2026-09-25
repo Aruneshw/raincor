@@ -17,18 +17,18 @@ class ThresholdSkillScore(BaseModel):
     nwpCsi: float
     mlCsi: float
     moeCsi: float
-    raincorCsi: float
+    arjunaCsi: float
 
 class ReliabilityBin(BaseModel):
     forecastProbability: float
     observedFrequencyNwp: float
-    observedFrequencyRaincor: float
+    observedFrequencyArjuna: float
     sampleCount: int
 
 class LeadTimeEvolutionPoint(BaseModel):
     leadTime: str
     nwpRmse: float
-    raincorRmse: float
+    arjunaRmse: float
     csiGainPct: float
 
 class VerificationResponse(BaseModel):

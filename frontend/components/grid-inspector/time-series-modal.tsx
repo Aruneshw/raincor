@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { X, CloudRain } from "lucide-react";
 import { useMapStore } from "@/store/map-store";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { GridTimeSeriesResponse } from "@/types/forecast";
 import { RainfallChart } from "@/components/charts/rainfall-chart";
 import { ClayButton } from "@/components/ui/clay-button";
@@ -19,7 +19,7 @@ export const TimeSeriesModal: React.FC = () => {
     if (selectedGridId) {
       setIsLoading(true);
       setHasError(false);
-      raincorApi
+      arjunaApi
         .getGridTimeSeries(selectedGridId)
         .then((res) => {
           setData(res);
@@ -135,7 +135,7 @@ export const TimeSeriesModal: React.FC = () => {
 
         {/* Modal Footer */}
         <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-white/10 text-xs text-slate-500 dark:text-slate-400">
-          <span>Source: NCMRWF NCUM + IMD AWS Observations + RAINCOR Bias Correction</span>
+          <span>Source: NCMRWF NCUM + IMD AWS Observations + ARJUNA Bias Correction</span>
           <ClayButton variant="secondary" size="sm" onClick={() => setTimeSeriesModalOpen(false)}>
             Close
           </ClayButton>

@@ -6,7 +6,7 @@ import { ClayCard } from "@/components/ui/clay-card";
 import { ClayBadge } from "@/components/ui/clay-badge";
 import { SkillBarChart } from "@/components/charts/skill-bar-chart";
 import { ReliabilityPlot } from "@/components/charts/reliability-plot";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { VerificationResponse, ModelMetricSet } from "@/types/verification";
 
 export default function VerificationPage() {
@@ -15,7 +15,7 @@ export default function VerificationPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    raincorApi
+    arjunaApi
       .getVerification()
       .then((res) => {
         setData(res);
@@ -50,7 +50,7 @@ export default function VerificationPage() {
             </ClayBadge>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Standard contingency scores (CSI, ETS, POD, FAR, FSS, RMSE) comparing Raw NWP against AI baseline, Mixture-of-Experts (MoE), and RAINCOR.
+            Standard contingency scores (CSI, ETS, POD, FAR, FSS, RMSE) comparing Raw NWP against AI baseline, Mixture-of-Experts (MoE), and ARJUNA.
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default function VerificationPage() {
             <p className="text-xs text-slate-400">All India grid-point contingency analysis (Lead Time T+24h)</p>
           </div>
           <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/50">
-            RAINCOR ranks #1 across all metrics
+            ARJUNA ranks #1 across all metrics
           </span>
         </div>
 
@@ -89,14 +89,14 @@ export default function VerificationPage() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {data?.models.map((m, idx) => {
-                const isRaincor = m.modelName.includes("RAINCOR");
+                const isArjuna = m.modelName.includes("ARJUNA");
                 return (
                   <tr
                     key={m.modelName}
-                    className={isRaincor ? "bg-blue-50/50 font-semibold" : "hover:bg-slate-50"}
+                    className={isArjuna ? "bg-blue-50/50 font-semibold" : "hover:bg-slate-50"}
                   >
                     <td className="py-3 text-navy flex items-center gap-2">
-                      {isRaincor && <Award className="w-4 h-4 text-brand-blue" />}
+                      {isArjuna && <Award className="w-4 h-4 text-brand-blue" />}
                       <span>{m.modelName}</span>
                     </td>
                     <td className="py-3 font-bold text-navy">{m.csi.toFixed(2)}</td>
@@ -195,8 +195,8 @@ export default function VerificationPage() {
                   <span className="font-semibold text-slate-600">{t.moeCsi.toFixed(2)}</span>
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-slate-200">
-                  <span className="font-bold text-brand-blue">RAINCOR Skill:</span>
-                  <span className="font-extrabold text-brand-blue text-sm">{t.raincorCsi.toFixed(2)}</span>
+                  <span className="font-bold text-brand-blue">ARJUNA Skill:</span>
+                  <span className="font-extrabold text-brand-blue text-sm">{t.arjunaCsi.toFixed(2)}</span>
                 </div>
               </div>
             </div>

@@ -8,7 +8,7 @@ import { RegimeDistChart } from "@/components/charts/regime-dist-chart";
 import { ClayCard } from "@/components/ui/clay-card";
 import { ClayBadge } from "@/components/ui/clay-badge";
 import { useMapStore } from "@/store/map-store";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { RegimeResponse } from "@/types/regime";
 import { REGIMES, REGIME_COLORS } from "@/lib/constants";
 
@@ -20,7 +20,7 @@ export default function RegimePage() {
   useEffect(() => {
     // Automatically switch map layer to regime
     setSelectedLayer("regime");
-    raincorApi
+    arjunaApi
       .getRegimeDistribution()
       .then((res) => {
         setData(res);

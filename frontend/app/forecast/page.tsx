@@ -9,7 +9,7 @@ import { ClayCard } from "@/components/ui/clay-card";
 import { ClayBadge } from "@/components/ui/clay-badge";
 import { useMapStore } from "@/store/map-store";
 import { useForecastStore } from "@/store/forecast-store";
-import { raincorApi } from "@/services/api/client";
+import { arjunaApi } from "@/services/api/client";
 import { ForecastResponse, ForecastLeadTime, ForecastDisplayMode } from "@/types/forecast";
 import { IMD_THRESHOLDS } from "@/lib/constants";
 
@@ -22,7 +22,7 @@ export default function ForecastPage() {
 
   useEffect(() => {
     setLoading(true);
-    raincorApi
+    arjunaApi
       .getForecast(leadTime, displayMode)
       .then((res) => {
         setForecast(res);
@@ -36,7 +36,7 @@ export default function ForecastPage() {
 
   const leadTimes: ForecastLeadTime[] = ["T+6h", "T+12h", "T+24h", "T+48h", "T+72h"];
   const modes: Array<{ id: ForecastDisplayMode; label: string; desc: string }> = [
-    { id: "bias_corrected", label: "RAINCOR Bias Corrected", desc: "Regime-aware AI corrected precipitation" },
+    { id: "bias_corrected", label: "ARJUNA Bias Corrected", desc: "Regime-aware AI corrected precipitation" },
     { id: "nwp", label: "Raw NWP (NCUM / GFS)", desc: "Unadjusted numerical model rainfall forecast" },
     { id: "anomaly", label: "Precipitation Anomaly", desc: "Departure from 30-year IMD Normal" },
   ];
