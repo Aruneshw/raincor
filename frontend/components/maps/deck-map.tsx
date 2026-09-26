@@ -6,12 +6,11 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import DeckGL from "@deck.gl/react";
 import { GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { FlyToInterpolator } from "@deck.gl/core";
-import { Play, Pause, Clock, Satellite, Map as MapIcon } from "lucide-react";
+import { Play, Pause, Clock, Satellite } from "lucide-react";
 
 import { useMapStore } from "@/store/map-store";
 import { useForecastStore } from "@/store/forecast-store";
 import { useFilterStore } from "@/store/filter-store";
-import { useThemeStore } from "@/store/theme-store";
 import { getIndiaGrids } from "@/lib/grid-generator";
 import { GridCell } from "@/types/grid";
 import { DistrictForecast, DistrictResponse } from "@/types/district";
@@ -99,7 +98,6 @@ const SATELLITE_STYLE = {
   ],
 };
 
-const DARK_STYLE = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
 // ─── Initial View State ─────────────────────────────────────────────────────
 const INITIAL_VIEW_STATE = {
@@ -193,14 +191,7 @@ export const DeckMap: React.FC = () => {
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [statesGeoJson, setStatesGeoJson] = useState<any>(null);
   const [districts, setDistricts] = useState<DistrictForecast[]>([]);
-  const [baseMap, setBaseMap] = useState<"satellite" | "dark">("satellite");
   const [viewState, setViewState] = useState<any>(INITIAL_VIEW_STATE);
-  const { theme } = useThemeStore();
-
-  // Synchronize basemap style with dark/light mode preference
-  useEffect(() => {
-    setBaseMap(theme === "dark" ? "dark" : "satellite");
-  }, [theme]);
 
   // Time-Series Animation State
   const [isPlaying, setIsPlaying] = useState(false);
@@ -607,7 +598,7 @@ export const DeckMap: React.FC = () => {
     handleDistrictClick,
   ]);
 
-  const mapStyle = baseMap === "satellite" ? SATELLITE_STYLE : DARK_STYLE;
+  const mapStyle = SATELLITE_STYLE;
   const hoveredGrid = hoverInfo?.object?.properties as GridCell | undefined;
   const hoveredDistrict = hoverInfo?.object?.name
     ? (hoverInfo.object as DistrictForecast)
@@ -634,11 +625,11 @@ export const DeckMap: React.FC = () => {
           controller={{
             doubleClickZoom: true,
             dragPan: true,
-            scrollZoom: { smooth: true, speed: 0.008 },
-            inertia: 350,
+            scrollZoom: { smooth: true, speed: 0.02 },
+            inertia: 200,
           }}
-          useDevicePixels={true}
-          pickingRadius={6}
+          useDevicePixels={false}
+          pickingRadius={4}
           layers={layers}
           getTooltip={() => null}
         >
@@ -753,28 +744,11 @@ export const DeckMap: React.FC = () => {
         </div>
       )}
 
-      {/* Base Map Toggle */}
-      <div className="absolute top-20 right-4 z-20 flex flex-col gap-1.5">
-        <button
-          onClick={() => setBaseMap("satellite")}
-          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all shadow-lg ${
-            baseMap === "satellite"
-              ? "bg-cyan-500/90 text-white"
-              : "bg-black/60 text-slate-300 hover:bg-black/80 backdrop-blur-md"
-          }`}
-        >
+      {/* Base Map Badge */}
+      <div className="absolute top-20 right-4 z-20">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-black/60 text-slate-300 backdrop-blur-md shadow-lg border border-white/10">
           <Satellite size={14} /> Satellite
-        </button>
-        <button
-          onClick={() => setBaseMap("dark")}
-          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all shadow-lg ${
-            baseMap === "dark"
-              ? "bg-cyan-500/90 text-white"
-              : "bg-black/60 text-slate-300 hover:bg-black/80 backdrop-blur-md"
-          }`}
-        >
-          <MapIcon size={14} /> Dark
-        </button>
+        </div>
       </div>
 
       {/* Time-Series Animation Playback Controls */}
