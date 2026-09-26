@@ -760,14 +760,24 @@ export const DeckMap: React.FC = () => {
       {/* Map Navigation Controls */}
       <div className="absolute top-[132px] right-4 z-20 flex flex-col gap-1.5">
         <button
-          onClick={() => setViewState((prev: any) => ({ ...prev, zoom: Math.min(prev.maxZoom || 12, prev.zoom + 1), transitionDuration: 300 }))}
+          onClick={() => setViewState((prev: any) => ({
+            ...prev,
+            zoom: Math.min(prev.maxZoom || 12, prev.zoom + 1),
+            transitionDuration: 300,
+            transitionInterpolator: new FlyToInterpolator(),
+          }))}
           className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors"
           title="Zoom In"
         >
           <Plus size={16} />
         </button>
         <button
-          onClick={() => setViewState((prev: any) => ({ ...prev, zoom: Math.max(prev.minZoom || 3, prev.zoom - 1), transitionDuration: 300 }))}
+          onClick={() => setViewState((prev: any) => ({
+            ...prev,
+            zoom: Math.max(prev.minZoom || 3, prev.zoom - 1),
+            transitionDuration: 300,
+            transitionInterpolator: new FlyToInterpolator(),
+          }))}
           className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors"
           title="Zoom Out"
         >
@@ -779,7 +789,8 @@ export const DeckMap: React.FC = () => {
             longitude: INITIAL_VIEW_STATE.longitude, 
             latitude: INITIAL_VIEW_STATE.latitude, 
             zoom: INITIAL_VIEW_STATE.zoom, 
-            transitionDuration: 1000 
+            transitionDuration: 1000,
+            transitionInterpolator: new FlyToInterpolator({ speed: 1.2 }),
           }))}
           className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors mt-2"
           title="Reset View"
