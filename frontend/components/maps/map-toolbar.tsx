@@ -27,7 +27,7 @@ export const MapToolbar: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white/90 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-2xl border border-white/80 dark:border-white/10 shadow-clay transition-colors duration-200">
+    <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white/40 dark:bg-[#0B132B]/40 backdrop-blur-3xl backdrop-saturate-[150%] rounded-[24px] border border-white/40 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300">
       {/* Model Mode Selector */}
       <div className="flex items-center gap-1.5 bg-[#EEF4FA] dark:bg-slate-800/80 p-1 rounded-xl">
         {modes.map((mode) => (

@@ -769,7 +769,7 @@ export const DeckMap: React.FC = () => {
           setHoveredCellId(null);
         }}
       >
-        <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-black/60 text-slate-300 backdrop-blur-md shadow-lg border border-white/10">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl text-xs font-semibold bg-[#0B132B]/40 text-slate-200 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10 transition-all duration-300">
           <Satellite size={14} /> Satellite
         </div>
       </div>
@@ -789,7 +789,7 @@ export const DeckMap: React.FC = () => {
             transitionDuration: 300,
             transitionInterpolator: new FlyToInterpolator(),
           }))}
-          className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors"
+          className="w-8 h-8 flex items-center justify-center bg-[#0B132B]/40 text-slate-200 hover:bg-[#0B132B]/60 hover:text-white backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-xl border border-white/10 transition-all duration-300"
           title="Zoom In"
         >
           <Plus size={16} />
@@ -801,7 +801,7 @@ export const DeckMap: React.FC = () => {
             transitionDuration: 300,
             transitionInterpolator: new FlyToInterpolator(),
           }))}
-          className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors"
+          className="w-8 h-8 flex items-center justify-center bg-[#0B132B]/40 text-slate-200 hover:bg-[#0B132B]/60 hover:text-white backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-xl border border-white/10 transition-all duration-300"
           title="Zoom Out"
         >
           <Minus size={16} />
@@ -812,7 +812,7 @@ export const DeckMap: React.FC = () => {
             // Optionally dispatch a resize event so DeckGL re-measures the container
             setTimeout(() => window.dispatchEvent(new Event("resize")), 100);
           }}
-          className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors mt-2"
+          className="w-8 h-8 flex items-center justify-center bg-[#0B132B]/40 text-slate-200 hover:bg-[#0B132B]/60 hover:text-white backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-xl border border-white/10 transition-all duration-300 mt-2"
           title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
         >
           {isFullscreen ? <Minimize size={14} /> : <Maximize size={14} />}
@@ -821,7 +821,7 @@ export const DeckMap: React.FC = () => {
 
       {/* Time-Series Animation Playback Controls */}
       <div 
-        className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 flex items-center gap-4 bg-black/75 backdrop-blur-xl px-5 py-2.5 rounded-2xl shadow-2xl border border-white/10"
+        className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 flex items-center gap-4 bg-[#0B132B]/40 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10 px-5 py-2.5 rounded-[24px] transition-all duration-300"
         onMouseEnter={() => {
           setHoverInfo(null);
           setHoveredCellId(null);
@@ -885,13 +885,13 @@ export const DeckMap: React.FC = () => {
           setHoveredCellId(null);
         }}
       >
-        <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 shadow-lg text-[10px] font-mono text-slate-300">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-2xl bg-[#0B132B]/40 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10 text-[10px] font-mono text-slate-200 transition-all duration-300">
           <span>Lat: {viewState.latitude?.toFixed(2)}°</span>
           <span>Lon: {viewState.longitude?.toFixed(2)}°</span>
           <span className="text-cyan-400 font-semibold">Z: {viewState.zoom?.toFixed(1)}</span>
         </div>
         
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 shadow-lg text-xs font-semibold text-slate-200">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#0B132B]/40 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10 text-xs font-semibold text-slate-200 transition-all duration-300">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           <span>
             {viewMode === "district"
