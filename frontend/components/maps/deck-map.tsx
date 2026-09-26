@@ -611,7 +611,13 @@ export const DeckMap: React.FC = () => {
   }, [leadTime]);
 
   return (
-    <div className="relative flex flex-col w-full h-[620px] rounded-3xl bg-[#0a0e17] border border-white/10 shadow-2xl overflow-hidden select-none">
+    <div 
+      className="relative flex flex-col w-full h-[620px] rounded-3xl bg-[#0a0e17] border border-white/10 shadow-2xl overflow-hidden select-none"
+      onMouseLeave={() => {
+        setHoverInfo(null);
+        setHoveredCellId(null);
+      }}
+    >
       {/* Toolbar */}
       <div className="absolute top-4 left-4 right-4 z-20 pointer-events-auto">
         <MapToolbar />
