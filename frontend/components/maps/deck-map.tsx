@@ -683,25 +683,29 @@ export const DeckMap: React.FC = () => {
                 <span className="font-semibold text-emerald-400 text-right truncate">
                   {hoveredGrid.regime}
                 </span>
-                <span className="text-slate-400">Rainfall</span>
+                <span className="text-slate-400">Regime Prob.</span>
+                <span className="font-semibold text-purple-400 text-right truncate">
+                  {Math.round(hoveredGrid.regimeProbability * 100)}%
+                </span>
+                <span className="text-slate-400">NWP Forecast</span>
+                <span className="text-slate-300 text-right">
+                  {formatRainfall(hoveredGrid.nwpRainfallMm)}
+                </span>
+                <span className="text-slate-400">AI Corrected</span>
                 <span className="font-bold text-amber-300 text-right">
                   {formatRainfall(hoveredGrid.correctedRainfallMm)}
+                </span>
+                <span className="text-slate-400">Bias Shift</span>
+                <span className={`text-right font-semibold ${hoveredGrid.biasMm > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {hoveredGrid.biasMm > 0 ? '+' : ''}{hoveredGrid.biasMm} mm
                 </span>
                 <span className="text-slate-400">P10–P90</span>
                 <span className="text-sky-300 text-right">
                   {formatRainfall(hoveredGrid.p10Mm)} – {formatRainfall(hoveredGrid.p90Mm)}
                 </span>
-                <span className="text-slate-400">Confidence</span>
-                <span
-                  className={`text-right font-semibold ${
-                    hoveredGrid.confidence === "High"
-                      ? "text-green-400"
-                      : hoveredGrid.confidence === "Medium"
-                      ? "text-yellow-400"
-                      : "text-red-400"
-                  }`}
-                >
-                  {hoveredGrid.confidence}
+                <span className="text-slate-400">Status</span>
+                <span className="text-teal-400 text-right font-medium">
+                  Simulation
                 </span>
                 {leadTime > 0 && (
                   <>
@@ -761,14 +765,22 @@ export const DeckMap: React.FC = () => {
         </div>
       )}
 
-      {/* Base Map Badge */}
+      {/* Base Map Badge & Freshness */}
       <div 
-        className="absolute top-20 right-4 z-20"
+        className="absolute top-20 right-4 z-20 flex flex-col items-end gap-2"
         onMouseEnter={() => {
           setHoverInfo(null);
           setHoveredCellId(null);
         }}
       >
+        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl text-[10px] font-semibold bg-[#0B132B]/60 text-emerald-400 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-emerald-500/30">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Prototype Telemetry Active
+        </div>
+        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl text-[10px] bg-[#0B132B]/40 text-slate-300 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10">
+          <Clock size={12} className="text-slate-400" />
+          Simulation Ref: {new Date().toISOString().slice(11, 16)} UTC
+        </div>
         <div className="flex items-center gap-2 px-3 py-2 rounded-2xl text-xs font-semibold bg-[#0B132B]/40 text-slate-200 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10 transition-all duration-300">
           <Satellite size={14} /> Satellite
         </div>

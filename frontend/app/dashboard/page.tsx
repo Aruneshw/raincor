@@ -9,6 +9,7 @@ import { GridInspector } from "@/components/grid-inspector/grid-inspector";
 import { RainfallChart } from "@/components/charts/rainfall-chart";
 import { PrototypeEvidenceChart } from "@/components/charts/prototype-evidence-chart";
 import { RegimeDistChart } from "@/components/charts/regime-dist-chart";
+import { AIPipelineTracker } from "@/components/ui/ai-pipeline-tracker";
 import { arjunaApi } from "@/services/api/client";
 import { ForecastResponse } from "@/types/forecast";
 import { RegimeResponse } from "@/types/regime";
@@ -90,10 +91,13 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* AI Processing Pipeline Tracker */}
+      <AIPipelineTracker />
+
       {/* Top 4 Operational KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
-          title="Total Rainfall (24h)"
+          title="Total Rainfall (AI Corrected)"
           value={forecast ? forecast.averageRainfallMm.toFixed(1) : "124.6"}
           unit="mm"
           change={{ value: "+18.2%", isPositive: true, label: "vs 30y Normal" }}
@@ -102,27 +106,27 @@ export default function DashboardPage() {
         />
 
         <KpiCard
-          title="Heavy Rain Grids"
+          title="Extreme Event Grids (MoE Routed)"
           value={forecast ? forecast.heavyRainGridsCount.toLocaleString() : "1,238"}
           unit="cells"
-          change={{ value: "+8.4%", isPositive: true, label: "exceeding 64.5 mm" }}
+          change={{ value: "+8.4%", isPositive: true, label: "exceeding 64.5mm (Expert Selected)" }}
           icon={AlertTriangle}
           iconColor="text-weather-warning"
         />
 
         <KpiCard
-          title="Transitioning Grids"
+          title="Regime Transitions (Markov)"
           value={forecast ? forecast.transitionGridsCount.toLocaleString() : "417"}
           unit="cells"
-          change={{ value: "24.6%", isPositive: true, label: "active regime shift" }}
+          change={{ value: "24.6%", isPositive: true, label: "active synoptic regime shift" }}
           icon={Activity}
           iconColor="text-weather-purple"
         />
 
         <KpiCard
-          title="Model Skill (CSI @ 64mm)"
+          title="AI Skill Score (CSI @ 64mm)"
           value="0.62"
-          change={{ value: "+0.14", isPositive: true, label: "gain over raw NWP" }}
+          change={{ value: "+0.14", isPositive: true, label: "gain over raw NWP (Bias Corrected)" }}
           icon={ShieldCheck}
           iconColor="text-weather-success"
         />
@@ -156,7 +160,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-500" />
-                <h3 className="text-sm font-bold text-navy">Priority Operational Alerts</h3>
+                <h3 className="text-sm font-bold text-navy">AI Operational Routing Alerts</h3>
               </div>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400">
                 {alerts.length} Active
@@ -186,7 +190,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-purple-600" />
-                <h3 className="text-sm font-bold text-navy">Regime Distribution (India)</h3>
+                <h3 className="text-sm font-bold text-navy">AI Regime Classification (India)</h3>
               </div>
               <span className="text-[10px] text-slate-400 font-medium">17,415 Grids</span>
             </div>
@@ -218,7 +222,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <h3 className="text-sm font-bold text-navy">Skill Benchmark (vs NWP)</h3>
+                <h3 className="text-sm font-bold text-navy">AI Skill Benchmark (vs Raw NWP)</h3>
               </div>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400">
                 +22% Accuracy
