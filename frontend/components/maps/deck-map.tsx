@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import Map from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import DeckGL from "@deck.gl/react";
 import { GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
-import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { Play, Pause, Clock, Satellite, Map as MapIcon } from "lucide-react";
 
@@ -24,29 +23,35 @@ import { fetchDistrictForecasts } from "@/services/mock/district-service";
 import { MapLegend } from "./map-legend";
 import { MapToolbar } from "./map-toolbar";
 
-// Static RGB Tuples for Instant O(1) Color Lookups without String Parsing
+// ─── IMD Precipitation Color Scale (RGBA) ──────────────────────────────────
+// Matches the PRECIPITATION_SCALE in constants.ts exactly
+// Each cell gets colored independently based on its rainfall value
+function getRainfallRGBA(mm: number): [number, number, number, number] {
+  if (mm < 1)   return [232, 238, 245, 25];   // Near-transparent
+  if (mm < 5)   return [208, 232, 250, 140];   // Very light blue
+  if (mm < 10)  return [163, 210, 247, 165];   // Light blue
+  if (mm < 25)  return [93, 170, 232, 185];    // Moderate blue
+  if (mm < 50)  return [47, 128, 217, 200];    // Medium blue
+  if (mm < 100) return [29, 100, 181, 215];    // Deep blue
+  if (mm < 200) return [242, 169, 59, 225];    // Amber/Orange (IMD Heavy)
+  if (mm < 300) return [224, 82, 82, 235];     // Red (IMD Very Heavy)
+  return              [139, 30, 143, 245];     // Purple (Extreme)
+}
+
+// ─── Regime Fill Colors (RGBA) ──────────────────────────────────────────────
 const REGIME_COLORS_RGB: Record<string, [number, number, number, number]> = {
-  "Active Monsoon": [34, 197, 94, 140],
-  "Break Monsoon": [234, 179, 8, 140],
-  "Monsoon Low / Depression": [59, 130, 246, 140],
-  "Western Disturbance": [168, 85, 247, 140],
-  "Orographic": [20, 184, 166, 140],
-  "Coastal": [6, 182, 212, 140],
-  "Post-Monsoon / Northeast": [249, 115, 22, 140],
+  "Active Monsoon": [47, 128, 217, 160],
+  "Break Monsoon": [160, 178, 198, 130],
+  "Monsoon Low / Depression": [117, 102, 216, 170],
+  "Western Disturbance": [242, 169, 59, 155],
+  "Orographic": [34, 160, 107, 165],
+  "Coastal": [2, 132, 199, 155],
+  "Post-Monsoon / Northeast": [249, 115, 22, 145],
+  "Others": [100, 116, 139, 120],
 };
-const DEFAULT_REGIME_RGB: [number, number, number, number] = [100, 116, 139, 120];
+const DEFAULT_REGIME_RGB: [number, number, number, number] = [100, 116, 139, 100];
 
-// High-fidelity IMD Doppler Radar Precipitation Palette
-const DOPPLER_HEATMAP_COLORS: [number, number, number][] = [
-  [56, 189, 248],   // Light Sky Blue (<5 mm)
-  [34, 197, 94],    // Green (5-15 mm)
-  [234, 179, 8],    // Yellow (15-35 mm)
-  [249, 115, 22],   // Orange (35-65 mm)
-  [239, 68, 68],    // Red (65-115 mm)
-  [168, 85, 247],   // Purple (>115 mm)
-];
-
-// District Alert Colors
+// ─── District Alert Colors ──────────────────────────────────────────────────
 const ALERT_COLORS_RGB: Record<string, [number, number, number, number]> = {
   Red: [239, 68, 68, 220],
   Orange: [249, 115, 22, 220],
@@ -54,7 +59,7 @@ const ALERT_COLORS_RGB: Record<string, [number, number, number, number]> = {
   Green: [34, 197, 94, 190],
 };
 
-// Map Basemap Styles
+// ─── Map Basemap Styles ─────────────────────────────────────────────────────
 const SATELLITE_STYLE = {
   version: 8 as const,
   name: "RainMind Satellite",
@@ -96,7 +101,7 @@ const SATELLITE_STYLE = {
 
 const DARK_STYLE = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
-// Initial View State focusing on India
+// ─── Initial View State ─────────────────────────────────────────────────────
 const INITIAL_VIEW_STATE = {
   longitude: 80.0,
   latitude: 22.5,
@@ -107,12 +112,84 @@ const INITIAL_VIEW_STATE = {
   maxZoom: 12,
 };
 
+// ─── Grid cell half-width for 0.25° resolution ─────────────────────────────
+const HALF_STEP = 0.125;
+
+// ─── Deterministic Weather Advection Model ──────────────────────────────────
+// Simulates spatially coherent monsoon movement (SW→NE general flow)
+// with cyclonic perturbation for depressions
+function getAdvectedRainfall(
+  g: GridCell,
+  leadTimeHours: number,
+  displayMode: string
+): number {
+  const baseValue = displayMode === "nwp"
+    ? g.nwpRainfallMm
+    : displayMode === "bias_corrected"
+    ? g.correctedRainfallMm
+    : Math.abs(g.anomalyMm);
+
+  if (leadTimeHours === 0) return baseValue;
+
+  // Deterministic phase based on position + time
+  const tNorm = leadTimeHours / 72;
+
+  // Southwest monsoon general advection direction
+  const advectLon = -0.008 * leadTimeHours; // Westward drift (degrees/hour)
+  const advectLat = 0.004 * leadTimeHours;  // Slight northward push
+
+  // Effective source position (where rain came from)
+  const srcLon = g.lon - advectLon;
+  const srcLat = g.lat - advectLat;
+
+  // Spatial modulation (large-scale storm system evolution)
+  const stormPhase = Math.sin(srcLat * 0.35 + srcLon * 0.25 + tNorm * Math.PI * 2);
+  const stormIntensity = Math.cos(srcLat * 0.18 - srcLon * 0.12 + tNorm * Math.PI * 1.5);
+
+  // Depression deepening/weakening cycle
+  const depressionCycle = Math.sin(tNorm * Math.PI * 3) * 0.3;
+
+  // Combine: base rainfall + storm modulation + depression cycle
+  const modulation = 1.0
+    + 0.35 * stormPhase * (1 - tNorm * 0.5) // storms weaken at longer lead times
+    + 0.2 * stormIntensity
+    + depressionCycle * (g.regime === "Monsoon Low / Depression" ? 1.5 : 0.3);
+
+  // Add forecast uncertainty growth
+  const uncertaintyGrowth = 1.0 + tNorm * 0.15;
+
+  return Math.max(0, baseValue * modulation * uncertaintyGrowth);
+}
+
+// ─── Transition probability evolution ───────────────────────────────────────
+function getAdvectedTransition(g: GridCell, leadTimeHours: number): number {
+  const base = g.transitionProbability || 0;
+  if (leadTimeHours === 0) return base;
+  const tNorm = leadTimeHours / 72;
+  const evolution = Math.sin(g.lat * 0.4 + g.lon * 0.3 + tNorm * Math.PI * 2);
+  return Math.min(1, Math.max(0, base + evolution * 0.25 * tNorm));
+}
+
+// ─── Uncertainty evolution ──────────────────────────────────────────────────
+function getAdvectedUncertainty(g: GridCell, leadTimeHours: number): number {
+  const spread = g.p90Mm - g.p10Mm;
+  if (leadTimeHours === 0) return spread;
+  const tNorm = leadTimeHours / 72;
+  // Uncertainty grows with forecast lead time
+  return spread * (1 + tNorm * 0.8);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// COMPONENT
+// ═══════════════════════════════════════════════════════════════════════════
+
 export const DeckMap: React.FC = () => {
   const { selectedGridId, selectGrid, selectedLayer, viewMode } = useMapStore();
   const { displayMode } = useForecastStore();
   const { selectedRegion } = useFilterStore();
   const grids = useMemo(() => getIndiaGrids(), []);
 
+  const [hoveredCellId, setHoveredCellId] = useState<string | null>(null);
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [statesGeoJson, setStatesGeoJson] = useState<any>(null);
   const [districts, setDistricts] = useState<DistrictForecast[]>([]);
@@ -128,6 +205,8 @@ export const DeckMap: React.FC = () => {
   // Time-Series Animation State
   const [isPlaying, setIsPlaying] = useState(false);
   const [leadTime, setLeadTime] = useState(0);
+  const animFrameRef = useRef<number | null>(null);
+  const lastTickRef = useRef<number>(0);
 
   // Fetch India state boundaries once
   useEffect(() => {
@@ -191,38 +270,30 @@ export const DeckMap: React.FC = () => {
     setViewState(nextViewState);
   }, []);
 
-  // Animation interval with smooth lead-time progression
+  // Animation using requestAnimationFrame for smoother playback
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setLeadTime((prev) => (prev >= 72 ? 0 : prev + 3));
-      }, 750);
+    if (!isPlaying) {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      return;
     }
-    return () => clearInterval(interval);
+
+    const tick = (timestamp: number) => {
+      if (timestamp - lastTickRef.current > 750) {
+        lastTickRef.current = timestamp;
+        setLeadTime((prev) => (prev >= 72 ? 0 : prev + 3));
+      }
+      animFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    animFrameRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
   }, [isPlaying]);
 
-  // Simulate data shifting over lead time
-  const animatedGrids = useMemo(() => {
-    if (leadTime === 0) return grids;
-    const phase = leadTime / 12;
-    return grids.map((g) => ({
-      ...g,
-      correctedRainfallMm: Math.max(
-        0,
-        g.correctedRainfallMm *
-          (1 + 0.4 * Math.sin(phase + g.lat * 0.3 + g.lon * 0.2))
-      ),
-      nwpRainfallMm: Math.max(
-        0,
-        g.nwpRainfallMm *
-          (1 + 0.35 * Math.sin(phase + g.lat * 0.25 + g.lon * 0.15))
-      ),
-    }));
-  }, [grids, leadTime]);
-
-  // Pre-generate base 0.25° grid GeoJSON geometry ONCE
-  // This completely eliminates allocating 10,000+ objects on every hover/render frame
+  // ─── Pre-compute Static Grid Polygon Geometry ONCE ──────────────────────
+  // Each grid cell is a 0.25° × 0.25° polygon
+  // Coordinates are reused across all visualization modes and time steps
   const baseGridFeatures = useMemo(() => {
     return grids.map((g) => ({
       type: "Feature" as const,
@@ -232,11 +303,11 @@ export const DeckMap: React.FC = () => {
         type: "Polygon" as const,
         coordinates: [
           [
-            [g.lon - 0.125, g.lat - 0.125],
-            [g.lon + 0.125, g.lat - 0.125],
-            [g.lon + 0.125, g.lat + 0.125],
-            [g.lon - 0.125, g.lat + 0.125],
-            [g.lon - 0.125, g.lat - 0.125],
+            [g.lon - HALF_STEP, g.lat - HALF_STEP],
+            [g.lon + HALF_STEP, g.lat - HALF_STEP],
+            [g.lon + HALF_STEP, g.lat + HALF_STEP],
+            [g.lon - HALF_STEP, g.lat + HALF_STEP],
+            [g.lon - HALF_STEP, g.lat - HALF_STEP],
           ],
         ],
       },
@@ -251,50 +322,59 @@ export const DeckMap: React.FC = () => {
     [baseGridFeatures]
   );
 
-  // Time-stepped GeoJSON: reuses static polygon coordinate arrays to prevent GC pauses
+  // ─── Time-stepped GeoJSON ─────────────────────────────────────────────
+  // Only updates properties (rainfall values) while reusing static geometry
   const animatedGridGeoJson = useMemo(() => {
     if (leadTime === 0) return baseGridGeoJson;
     return {
       type: "FeatureCollection" as const,
-      features: animatedGrids.map((g, idx) => ({
-        type: "Feature" as const,
-        id: g.id,
-        properties: g,
-        geometry: baseGridFeatures[idx].geometry,
-      })),
+      features: grids.map((g, idx) => {
+        const advectedRainfall = getAdvectedRainfall(g, leadTime, displayMode);
+        const advectedNwp = getAdvectedRainfall(
+          { ...g, correctedRainfallMm: g.nwpRainfallMm } as GridCell,
+          leadTime,
+          "bias_corrected"
+        );
+        return {
+          type: "Feature" as const,
+          id: g.id,
+          properties: {
+            ...g,
+            correctedRainfallMm: advectedRainfall,
+            nwpRainfallMm: advectedNwp,
+            anomalyMm: advectedRainfall - advectedNwp,
+            transitionProbability: getAdvectedTransition(g, leadTime),
+            p90Mm: g.p10Mm + getAdvectedUncertainty(g, leadTime),
+          },
+          geometry: baseGridFeatures[idx].geometry,
+        };
+      }),
     };
-  }, [leadTime, animatedGrids, baseGridGeoJson, baseGridFeatures]);
+  }, [leadTime, grids, displayMode, baseGridGeoJson, baseGridFeatures]);
 
-  // Selected cell feature for glowing highlight outline
+  // ─── Selected cell feature for highlight ──────────────────────────────
   const selectedGridFeature = useMemo(() => {
     if (!selectedGridId) return null;
-    const cell = grids.find((g) => g.id === selectedGridId);
-    if (!cell) return null;
+    const idx = grids.findIndex((g) => g.id === selectedGridId);
+    if (idx === -1) return null;
     return {
       type: "FeatureCollection" as const,
-      features: [
-        {
-          type: "Feature" as const,
-          id: cell.id,
-          properties: cell,
-          geometry: {
-            type: "Polygon" as const,
-            coordinates: [
-              [
-                [cell.lon - 0.125, cell.lat - 0.125],
-                [cell.lon + 0.125, cell.lat - 0.125],
-                [cell.lon + 0.125, cell.lat + 0.125],
-                [cell.lon - 0.125, cell.lat + 0.125],
-                [cell.lon - 0.125, cell.lat - 0.125],
-              ],
-            ],
-          },
-        },
-      ],
+      features: [baseGridFeatures[idx]],
     };
-  }, [selectedGridId, grids]);
+  }, [selectedGridId, grids, baseGridFeatures]);
 
-  // Get rainfall value based on display mode
+  // ─── Hovered cell feature for subtle highlight ────────────────────────
+  const hoveredGridFeature = useMemo(() => {
+    if (!hoveredCellId) return null;
+    const idx = grids.findIndex((g) => g.id === hoveredCellId);
+    if (idx === -1) return null;
+    return {
+      type: "FeatureCollection" as const,
+      features: [baseGridFeatures[idx]],
+    };
+  }, [hoveredCellId, grids, baseGridFeatures]);
+
+  // ─── Get rainfall value based on display mode ─────────────────────────
   const getRainfall = useCallback(
     (g: GridCell) => {
       if (displayMode === "nwp") return g.nwpRainfallMm;
@@ -304,9 +384,55 @@ export const DeckMap: React.FC = () => {
     [displayMode]
   );
 
-  // Hover and Click callbacks
+  // ─── Color accessor for the unified grid cell fill ────────────────────
+  // This is the KEY function: each cell gets its own color based on
+  // selectedLayer + rainfall/regime/transition/uncertainty value
+  const getCellFillColor = useCallback(
+    (f: any): [number, number, number, number] => {
+      const g = f.properties as GridCell;
+
+      switch (selectedLayer) {
+        case "rainfall": {
+          const mm = getRainfall(g);
+          return getRainfallRGBA(mm);
+        }
+        case "regime": {
+          return REGIME_COLORS_RGB[g.regime] || DEFAULT_REGIME_RGB;
+        }
+        case "transition": {
+          const p = g.transitionProbability || 0;
+          if (!g.isTransitioning && p < 0.1) return [60, 65, 80, 30];
+          // Gradient: slate → amber → purple based on probability
+          const r = Math.round(80 + p * 120);
+          const gv = Math.round(60 + (1 - p) * 40);
+          const b = Math.round(120 + p * 100);
+          const a = Math.round(50 + p * 180);
+          return [r, gv, b, a];
+        }
+        case "uncertainty": {
+          const spread = g.p90Mm - g.p10Mm;
+          if (spread < 15)  return [180, 210, 240, 60];   // Low
+          if (spread < 35)  return [120, 180, 230, 100];   // Moderate-Low
+          if (spread < 60)  return [60, 140, 210, 145];    // Moderate
+          if (spread < 90)  return [30, 100, 190, 180];    // High
+          return [40, 30, 140, 210];                       // Very High
+        }
+        default:
+          return [0, 0, 0, 0];
+      }
+    },
+    [selectedLayer, getRainfall]
+  );
+
+  // ─── Hover and Click callbacks ────────────────────────────────────────
   const handleGridHover = useCallback((info: any) => {
-    setHoverInfo(info?.object ? info : null);
+    if (info?.object?.properties?.id) {
+      setHoveredCellId(info.object.properties.id);
+      setHoverInfo(info);
+    } else {
+      setHoveredCellId(null);
+      setHoverInfo(null);
+    }
   }, []);
 
   const handleGridClick = useCallback(
@@ -330,59 +456,31 @@ export const DeckMap: React.FC = () => {
     [grids, selectGrid]
   );
 
-  // Memoized DeckGL Layers: Decoupled from hoverInfo to maintain liquid 60+ FPS
+  // ─── DeckGL Layers ────────────────────────────────────────────────────
+  // LAYER ORDER (bottom to top):
+  // 1. Cell fills (precipitation/regime/transition/uncertainty data)
+  // 2. India state boundaries
+  // 3. Grid cell boundaries (ABOVE data, ABOVE boundaries)
+  // 4. District markers (district mode)
+  // 5. Hovered cell highlight
+  // 6. Selected cell highlight
   const layers = useMemo(() => {
-    const isRainfall = selectedLayer === "rainfall";
+    const currentGeoJson = leadTime === 0 ? baseGridGeoJson : animatedGridGeoJson;
+    const isGridMode = viewMode === "grid";
 
     return [
-      // Layer 1: Smooth IMD Radar-style Heatmap Overlay
-      new HeatmapLayer<GridCell>({
-        id: "rainfall-heatmap",
-        data: animatedGrids,
-        getPosition: (d) => [d.lon, d.lat],
-        getWeight: (d) => getRainfall(d),
-        radiusPixels: 64,
-        intensity: 0.9,
-        threshold: 0.05,
-        colorDomain: [0, 140],
-        debounceTimeout: 20,
-        aggregation: "SUM",
-        colorRange: DOPPLER_HEATMAP_COLORS,
-        visible: isRainfall && viewMode === "grid",
-        updateTriggers: {
-          getWeight: [displayMode, leadTime],
-        },
-      }),
-
-      // Layer 2: Regime / Transition / Uncertainty Choropleth (Grid mode)
-      ...(!isRainfall && viewMode === "grid"
+      // ── Layer 1: Grid Cell Fills ──────────────────────────────────────
+      // Each cell independently colored by rainfall/regime/transition/uncertainty
+      // This is the PRIMARY visualization — NOT a heatmap, NOT a blob
+      ...(isGridMode
         ? [
             new GeoJsonLayer({
-              id: "grid-choropleth",
-              data: animatedGridGeoJson,
+              id: "grid-cell-fills",
+              data: currentGeoJson,
               pickable: true,
-              stroked: true,
+              stroked: false,   // Boundaries are a separate layer
               filled: true,
-              lineWidthMinPixels: 0.5,
-              getLineColor: [255, 255, 255, 30],
-              getLineWidth: 200,
-              getFillColor: (f: any) => {
-                const g = f.properties as GridCell;
-                if (selectedLayer === "regime") {
-                  return REGIME_COLORS_RGB[g.regime] || DEFAULT_REGIME_RGB;
-                }
-                if (selectedLayer === "transition") {
-                  const p = g.transitionProbability || 0;
-                  if (!g.isTransitioning) return [100, 100, 120, 20];
-                  return [120 + p * 80, 50, 200, Math.round(70 + p * 140)];
-                }
-                // Uncertainty spread: P90 - P10
-                const spread = g.p90Mm - g.p10Mm;
-                if (spread < 20) return [200, 230, 250, 70];
-                if (spread < 50) return [100, 180, 240, 110];
-                if (spread < 90) return [20, 100, 200, 150];
-                return [50, 20, 130, 190];
-              },
+              getFillColor: getCellFillColor as any,
               onClick: handleGridClick,
               onHover: handleGridHover,
               updateTriggers: {
@@ -392,7 +490,8 @@ export const DeckMap: React.FC = () => {
           ]
         : []),
 
-      // Layer 3: India State Boundaries (Crisp vector overlays)
+      // ── Layer 2: India State Boundaries ───────────────────────────────
+      // Crisp vector state outlines, always visible above cell fills
       ...(statesGeoJson
         ? [
             new GeoJsonLayer({
@@ -402,13 +501,32 @@ export const DeckMap: React.FC = () => {
               stroked: true,
               filled: false,
               lineWidthMinPixels: 1.5,
-              getLineColor: [255, 255, 255, 150],
+              getLineColor: [255, 255, 255, 140],
               getLineWidth: 1200,
             }),
           ]
         : []),
 
-      // Layer 4: District Alert Pins (District mode)
+      // ── Layer 3: Grid Cell Boundaries ─────────────────────────────────
+      // Thin, subtle, professional meteorological grid lines
+      // ALWAYS rendered ABOVE the precipitation/data fill
+      // This ensures grid structure is NEVER hidden by rainfall intensity
+      ...(isGridMode
+        ? [
+            new GeoJsonLayer({
+              id: "grid-cell-boundaries",
+              data: baseGridGeoJson,
+              pickable: false,
+              stroked: true,
+              filled: false,
+              lineWidthMinPixels: 0.5,
+              getLineColor: [200, 220, 255, 45],
+              getLineWidth: 80,
+            }),
+          ]
+        : []),
+
+      // ── Layer 4: District Alert Pins (District mode) ──────────────────
       ...(viewMode === "district" && districts.length > 0
         ? [
             new ScatterplotLayer<DistrictForecast>({
@@ -436,24 +554,27 @@ export const DeckMap: React.FC = () => {
           ]
         : []),
 
-      // Layer 5: Invisible High-Performance Click Target for Heatmap Mode
-      ...(isRainfall && viewMode === "grid"
+      // ── Layer 5: Hovered Cell Highlight ───────────────────────────────
+      // Subtle luminous border on ONLY the hovered cell
+      ...(hoveredGridFeature && isGridMode
         ? [
             new GeoJsonLayer({
-              id: "grid-click-target",
-              data: baseGridGeoJson,
-              pickable: true,
-              stroked: false,
+              id: "hovered-cell-highlight",
+              data: hoveredGridFeature,
+              pickable: false,
+              stroked: true,
               filled: true,
-              getFillColor: [0, 0, 0, 0],
-              onClick: handleGridClick,
-              onHover: handleGridHover,
+              getFillColor: [120, 200, 255, 25],
+              getLineColor: [140, 220, 255, 180],
+              lineWidthMinPixels: 2,
+              getLineWidth: 1500,
             }),
           ]
         : []),
 
-      // Layer 6: Selected Grid Cell Highlight (Glowing cyan indicator)
-      ...(selectedGridFeature && viewMode === "grid"
+      // ── Layer 6: Selected Cell Highlight ──────────────────────────────
+      // Glowing cyan indicator for the actively selected grid cell
+      ...(selectedGridFeature && isGridMode
         ? [
             new GeoJsonLayer({
               id: "selected-grid-highlight",
@@ -461,7 +582,7 @@ export const DeckMap: React.FC = () => {
               pickable: false,
               stroked: true,
               filled: true,
-              getFillColor: [6, 182, 212, 50],
+              getFillColor: [6, 182, 212, 45],
               getLineColor: [34, 211, 238, 255],
               lineWidthMinPixels: 3,
               getLineWidth: 2200,
@@ -474,13 +595,13 @@ export const DeckMap: React.FC = () => {
     viewMode,
     displayMode,
     leadTime,
-    animatedGrids,
-    animatedGridGeoJson,
     baseGridGeoJson,
+    animatedGridGeoJson,
     statesGeoJson,
     districts,
+    hoveredGridFeature,
     selectedGridFeature,
-    getRainfall,
+    getCellFillColor,
     handleGridClick,
     handleGridHover,
     handleDistrictClick,
@@ -491,6 +612,12 @@ export const DeckMap: React.FC = () => {
   const hoveredDistrict = hoverInfo?.object?.name
     ? (hoverInfo.object as DistrictForecast)
     : undefined;
+
+  // ─── Forecast time label ──────────────────────────────────────────────
+  const forecastLabel = useMemo(() => {
+    if (leadTime === 0) return "Analysis (T+0)";
+    return `Forecast T+${leadTime}h`;
+  }, [leadTime]);
 
   return (
     <div className="relative flex flex-col w-full h-[620px] rounded-3xl bg-[#0a0e17] border border-white/10 shadow-2xl overflow-hidden select-none">
@@ -524,7 +651,7 @@ export const DeckMap: React.FC = () => {
         </DeckGL>
       </div>
 
-      {/* Smooth Hover Tooltip (Decoupled from Layer Evaluation) */}
+      {/* ─── Grid Cell Hover Tooltip ─────────────────────────────────── */}
       {(hoveredGrid || hoveredDistrict) && (
         <div
           className="absolute z-30 pointer-events-none p-3.5 bg-[#0B1929]/95 text-white rounded-xl shadow-2xl backdrop-blur-md text-xs border border-cyan-400/25 -translate-x-1/2 -translate-y-full min-w-[210px] transition-transform duration-75"
@@ -568,6 +695,14 @@ export const DeckMap: React.FC = () => {
                 >
                   {hoveredGrid.confidence}
                 </span>
+                {leadTime > 0 && (
+                  <>
+                    <span className="text-slate-400">Forecast</span>
+                    <span className="text-cyan-300 text-right font-mono text-[10px]">
+                      {forecastLabel}
+                    </span>
+                  </>
+                )}
               </div>
             </>
           )}
