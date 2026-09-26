@@ -74,8 +74,8 @@ export default function DataMonitorPage() {
                 <span
                   className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                     src.status === "LIVE"
-                      ? "bg-emerald-100 text-emerald-800"
-                      : "bg-amber-100 text-amber-800"
+                      ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400"
+                      : "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400"
                   }`}
                 >
                   ● {src.status}
@@ -83,10 +83,10 @@ export default function DataMonitorPage() {
               </div>
 
               <div className="text-[11px] text-slate-500 mb-3">
-                Provider: <span className="font-semibold text-slate-700">{src.provider}</span>
+                Provider: <span className="font-semibold text-slate-700 dark:text-slate-300">{src.provider}</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs py-2 border-y border-slate-100">
+              <div className="grid grid-cols-2 gap-2 text-xs py-2 border-y border-slate-100 dark:border-white/10">
                 <div>
                   <span className="text-[10px] text-slate-400 block">Record Count</span>
                   <span className="font-bold text-navy">{src.recordCount}</span>
@@ -97,7 +97,7 @@ export default function DataMonitorPage() {
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-400 block">Latency</span>
-                  <span className="font-semibold text-slate-700">{src.latencySeconds}s</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">{src.latencySeconds}s</span>
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-400 block">Quality Score</span>
@@ -118,7 +118,7 @@ export default function DataMonitorPage() {
 
       {/* Ingestion Audit Trail Table */}
       <div className="clay-card p-5">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10 mb-3">
           <div>
             <h3 className="text-sm font-bold text-navy">Recent Ingestion Cycles &amp; Audit Logs</h3>
             <p className="text-xs text-slate-400">Automated regridding, QC filter, and regime-routing triggers</p>
@@ -131,7 +131,7 @@ export default function DataMonitorPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
             <thead>
-              <tr className="text-slate-400 border-b border-slate-100">
+              <tr className="text-slate-400 border-b border-slate-100 dark:border-white/10">
                 <th className="pb-2.5 font-semibold">Timestamp (IST)</th>
                 <th className="pb-2.5 font-semibold">Source Stream</th>
                 <th className="pb-2.5 font-semibold">Cycle / Run</th>
@@ -142,23 +142,23 @@ export default function DataMonitorPage() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {data?.recentLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-50">
-                  <td className="py-2.5 text-slate-600 font-mono text-[11px]">{log.timestamp}</td>
+                <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-white/5 dark:bg-white/5">
+                  <td className="py-2.5 text-slate-600 dark:text-slate-400 font-mono text-[11px]">{log.timestamp}</td>
                   <td className="py-2.5 font-bold text-navy">{log.source}</td>
-                  <td className="py-2.5 text-slate-600 font-medium">{log.cycle}</td>
-                  <td className="py-2.5 font-mono text-slate-800">{log.recordsIngested.toLocaleString()}</td>
+                  <td className="py-2.5 text-slate-600 dark:text-slate-400 font-medium">{log.cycle}</td>
+                  <td className="py-2.5 font-mono text-slate-800 dark:text-slate-200">{log.recordsIngested.toLocaleString()}</td>
                   <td className="py-2.5">
                     <span
                       className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                         log.status === "SUCCESS"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : "bg-amber-100 text-amber-800"
+                          ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400"
+                          : "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400"
                       }`}
                     >
                       {log.status}
                     </span>
                   </td>
-                  <td className="py-2.5 text-slate-600 font-medium">{log.message}</td>
+                  <td className="py-2.5 text-slate-600 dark:text-slate-400 font-medium">{log.message}</td>
                 </tr>
               ))}
             </tbody>

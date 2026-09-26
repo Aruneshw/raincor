@@ -86,7 +86,7 @@ export default function DashboardPage() {
       {error && (
         <div className="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs flex items-center justify-between">
           <span>{error}</span>
-          <span className="text-[10px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full font-semibold">Offline Fallback Active</span>
+          <span className="text-[10px] text-amber-700 bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 rounded-full font-semibold">Offline Fallback Active</span>
         </div>
       )}
 
@@ -153,12 +153,12 @@ export default function DashboardPage() {
         {/* Real-Time Operational Alerts */}
         <ClayCard className="p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-500" />
                 <h3 className="text-sm font-bold text-navy">Priority Operational Alerts</h3>
               </div>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400">
                 {alerts.length} Active
               </span>
             </div>
@@ -170,7 +170,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="pt-4 mt-3 border-t border-slate-100 text-right">
+          <div className="pt-4 mt-3 border-t border-slate-100 dark:border-white/10 text-right">
             <Link
               href="/transition"
               className="text-xs font-semibold text-brand-blue hover:text-brand-blue-dark inline-flex items-center gap-1"
@@ -183,7 +183,7 @@ export default function DashboardPage() {
         {/* Active Regime Distribution */}
         <ClayCard className="p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-purple-600" />
                 <h3 className="text-sm font-bold text-navy">Regime Distribution (India)</h3>
@@ -202,7 +202,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 text-right">
+          <div className="pt-3 border-t border-slate-100 dark:border-white/10 text-right">
             <Link
               href="/regime"
               className="text-xs font-semibold text-brand-blue hover:text-brand-blue-dark inline-flex items-center gap-1"
@@ -215,37 +215,37 @@ export default function DashboardPage() {
         {/* Verification & Skill Benchmark Mini-Summary */}
         <ClayCard className="p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 <h3 className="text-sm font-bold text-navy">Skill Benchmark (vs NWP)</h3>
               </div>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400">
                 +22% Accuracy
               </span>
             </div>
 
             <div className="mt-3 space-y-3 text-xs">
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50">
-                <span className="text-slate-600 font-medium">RMSE Error Reduction</span>
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-white/5">
+                <span className="text-slate-600 dark:text-slate-400 font-medium">RMSE Error Reduction</span>
                 <span className="font-bold text-emerald-700">-43.9% (26.4 → 14.8 mm)</span>
               </div>
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50">
-                <span className="text-slate-600 font-medium">Heavy Rain POD (Hit Rate)</span>
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-white/5">
+                <span className="text-slate-600 dark:text-slate-400 font-medium">Heavy Rain POD (Hit Rate)</span>
                 <span className="font-bold text-brand-blue">84.0% (vs 68.0% NWP)</span>
               </div>
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50">
-                <span className="text-slate-600 font-medium">False Alarm Ratio (FAR)</span>
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-white/5">
+                <span className="text-slate-600 dark:text-slate-400 font-medium">False Alarm Ratio (FAR)</span>
                 <span className="font-bold text-navy">0.28 (vs 0.46 NWP)</span>
               </div>
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50">
-                <span className="text-slate-600 font-medium">Equitable Threat Score</span>
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-white/5">
+                <span className="text-slate-600 dark:text-slate-400 font-medium">Equitable Threat Score</span>
                 <span className="font-bold text-purple-700">0.54 (+50% gain)</span>
               </div>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 text-right">
+          <div className="pt-3 border-t border-slate-100 dark:border-white/10 text-right">
             <Link
               href="/verification"
               className="text-xs font-semibold text-brand-blue hover:text-brand-blue-dark inline-flex items-center gap-1"

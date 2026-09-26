@@ -72,14 +72,14 @@ export default function RegimePage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Regime Breakdown List */}
         <ClayCard className="p-5">
-          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
             <span>Regime Coverage</span>
             <span className="text-xs text-slate-400 font-normal">17,415 Grids</span>
           </h3>
 
           <div className="space-y-2.5">
             {data?.distribution.map((item) => (
-              <div key={item.regime} className="p-2.5 rounded-xl bg-slate-50 flex items-center justify-between text-xs">
+              <div key={item.regime} className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span
                     className="w-3 h-3 rounded-full shrink-0 shadow-xs"
@@ -99,7 +99,7 @@ export default function RegimePage() {
         {/* Doughnut Distribution Chart */}
         <ClayCard className="p-5 flex flex-col justify-between">
           <div>
-            <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100">
+            <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 dark:border-white/10">
               Distribution Visualizer
             </h3>
             {data ? (
@@ -117,7 +117,7 @@ export default function RegimePage() {
 
         {/* 72-Hour Markov Transition Matrix Preview */}
         <ClayCard className="p-5">
-          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
             <span>Transition Matrix (Next 72h)</span>
             <ClayBadge variant="primary" size="sm">Markovian</ClayBadge>
           </h3>
@@ -125,7 +125,7 @@ export default function RegimePage() {
           <div className="space-y-3 text-xs">
             <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200/60">
               <div className="font-semibold text-brand-blue mb-1">Active Monsoon → Depression</div>
-              <div className="flex items-center justify-between text-[11px] text-slate-600">
+              <div className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400">
                 <span>Probability: <strong>68% persistence</strong> | 15% shift</span>
                 <span className="text-emerald-700 font-semibold">High Stability</span>
               </div>
@@ -133,15 +133,15 @@ export default function RegimePage() {
 
             <div className="p-2.5 rounded-xl bg-purple-50/70 border border-purple-200/60">
               <div className="font-semibold text-purple-700 mb-1">Monsoon Low → Coastal</div>
-              <div className="flex items-center justify-between text-[11px] text-slate-600">
+              <div className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400">
                 <span>Probability: 28% Active | 12% Coastal</span>
                 <span className="text-purple-700 font-semibold">Decaying Track</span>
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-              <div className="font-semibold text-slate-700 mb-1">Break Monsoon → Active</div>
-              <div className="flex items-center justify-between text-[11px] text-slate-600">
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10">
+              <div className="font-semibold text-slate-700 dark:text-slate-300 mb-1">Break Monsoon → Active</div>
+              <div className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400">
                 <span>Probability: 22% revival in 72h</span>
                 <span className="text-slate-500 font-semibold">Revival Phase</span>
               </div>

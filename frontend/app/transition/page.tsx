@@ -73,7 +73,7 @@ export default function TransitionPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Active Transition Hotspots List */}
         <div className="lg:col-span-2 clay-card p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10 mb-3">
             <div>
               <h3 className="text-sm font-bold text-navy">Priority Transition Hotspots</h3>
               <p className="text-xs text-slate-400">Click any hotspot grid to inspect in detail</p>
@@ -86,7 +86,7 @@ export default function TransitionPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-100">
+                <tr className="text-slate-400 border-b border-slate-100 dark:border-white/10">
                   <th className="pb-2 font-semibold">Grid ID</th>
                   <th className="pb-2 font-semibold">Region</th>
                   <th className="pb-2 font-semibold">Regime Transition</th>
@@ -100,7 +100,7 @@ export default function TransitionPage() {
                   <tr
                     key={hotspot.gridId}
                     onClick={() => selectGrid(hotspot.gridId)}
-                    className="hover:bg-blue-50/50 cursor-pointer transition-colors"
+                    className="hover:bg-blue-50/50 dark:bg-blue-900/20 cursor-pointer transition-colors"
                   >
                     <td className="py-2.5 font-bold text-brand-blue">{hotspot.gridId}</td>
                     <td className="py-2.5 text-navy font-medium">
@@ -117,7 +117,7 @@ export default function TransitionPage() {
                     <td className="py-2.5 font-semibold text-rose-600">
                       +{hotspot.nwpLagHours}h
                     </td>
-                    <td className="py-2.5 font-medium text-slate-700">
+                    <td className="py-2.5 font-medium text-slate-700 dark:text-slate-300">
                       {(hotspot.neighbourConsistency * 100).toFixed(0)}%
                     </td>
                   </tr>
@@ -130,13 +130,13 @@ export default function TransitionPage() {
         {/* Transition Trajectory Diagram */}
         <ClayCard className="p-5 flex flex-col justify-between">
           <div>
-            <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
               <span>Transition Trajectory</span>
               <Activity className="w-4 h-4 text-purple-600" />
             </h3>
 
             <div className="space-y-4 py-2">
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10/80">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
                   1. Current State
                 </span>
@@ -172,14 +172,14 @@ export default function TransitionPage() {
                   3. Predicted Regime
                 </span>
                 <div className="text-sm font-bold text-brand-blue">Monsoon Low / Depression</div>
-                <div className="text-xs text-slate-600 mt-0.5">
+                <div className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                   Rainfall surge expectation (+25-50mm)
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 text-[11px] text-slate-400 text-center">
+          <div className="pt-3 border-t border-slate-100 dark:border-white/10 text-[11px] text-slate-400 text-center">
             NWP model update occurs every 6h; AI regime tracking updates hourly.
           </div>
         </ClayCard>

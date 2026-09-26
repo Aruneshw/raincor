@@ -63,7 +63,7 @@ export default function VerificationPage() {
 
       {/* Model Benchmark Comparison Table */}
       <div className="clay-card p-5">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10 mb-3">
           <div>
             <h3 className="text-sm font-bold text-navy">Comprehensive Model Skill Matrix</h3>
             <p className="text-xs text-slate-400">All India grid-point contingency analysis (Lead Time T+24h)</p>
@@ -76,7 +76,7 @@ export default function VerificationPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
             <thead>
-              <tr className="text-slate-400 border-b border-slate-100">
+              <tr className="text-slate-400 border-b border-slate-100 dark:border-white/10">
                 <th className="pb-2.5 font-semibold">Model Pipeline</th>
                 <th className="pb-2.5 font-semibold">CSI (Threat) ↑</th>
                 <th className="pb-2.5 font-semibold">ETS ↑</th>
@@ -93,19 +93,19 @@ export default function VerificationPage() {
                 return (
                   <tr
                     key={m.modelName}
-                    className={isArjuna ? "bg-blue-50/50 font-semibold" : "hover:bg-slate-50"}
+                    className={isArjuna ? "bg-blue-50/50 dark:bg-blue-900/20 font-semibold" : "hover:bg-slate-50 dark:hover:bg-white/5 dark:bg-white/5"}
                   >
                     <td className="py-3 text-navy flex items-center gap-2">
                       {isArjuna && <Award className="w-4 h-4 text-brand-blue" />}
                       <span>{m.modelName}</span>
                     </td>
                     <td className="py-3 font-bold text-navy">{m.csi.toFixed(2)}</td>
-                    <td className="py-3 text-slate-700">{m.ets.toFixed(2)}</td>
-                    <td className="py-3 text-slate-700 font-semibold">{(m.pod * 100).toFixed(1)}%</td>
-                    <td className="py-3 text-slate-700">{(m.far * 100).toFixed(1)}%</td>
-                    <td className="py-3 text-slate-700">{m.fss.toFixed(2)}</td>
+                    <td className="py-3 text-slate-700 dark:text-slate-300">{m.ets.toFixed(2)}</td>
+                    <td className="py-3 text-slate-700 dark:text-slate-300 font-semibold">{(m.pod * 100).toFixed(1)}%</td>
+                    <td className="py-3 text-slate-700 dark:text-slate-300">{(m.far * 100).toFixed(1)}%</td>
+                    <td className="py-3 text-slate-700 dark:text-slate-300">{m.fss.toFixed(2)}</td>
                     <td className="py-3 font-bold text-slate-900">{m.rmse.toFixed(1)} mm</td>
-                    <td className="py-3 text-slate-700">{m.biasRatio.toFixed(2)}</td>
+                    <td className="py-3 text-slate-700 dark:text-slate-300">{m.biasRatio.toFixed(2)}</td>
                   </tr>
                 );
               })}
@@ -118,7 +118,7 @@ export default function VerificationPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <ClayCard className="p-5 flex flex-col justify-between">
           <div>
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-white/10 mb-4">
               <h3 className="text-sm font-bold text-navy">Comparative Skill Scores</h3>
               <div className="flex flex-wrap gap-1">
                 {metrics.map((m) => (
@@ -128,7 +128,7 @@ export default function VerificationPage() {
                     className={`px-2 py-1 text-[11px] rounded-md font-semibold transition-all ${
                       selectedMetric === m.id
                         ? "bg-brand-blue text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        : "bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200"
                     }`}
                   >
                     {m.id.toUpperCase()}
@@ -150,7 +150,7 @@ export default function VerificationPage() {
         {/* Reliability Diagram (Probability Calibration) */}
         <ClayCard className="p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10 mb-4">
               <div>
                 <h3 className="text-sm font-bold text-navy">Reliability Diagram (Calibration)</h3>
                 <p className="text-[11px] text-slate-400">Forecast probability vs observed relative frequency</p>
@@ -173,28 +173,28 @@ export default function VerificationPage() {
 
       {/* Rainfall Threshold Performance */}
       <div className="clay-card p-5">
-        <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100">
+        <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 dark:border-white/10">
           Critical Success Index (CSI) across IMD Operational Rainfall Thresholds
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
           {data?.thresholdSkills.map((t) => (
-            <div key={t.thresholdMm} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div key={t.thresholdMm} className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10">
               <span className="text-xs font-bold text-navy block mb-2">{t.thresholdLabel}</span>
               <div className="space-y-1.5 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">Raw NWP CSI:</span>
-                  <span className="font-semibold text-slate-600">{t.nwpCsi.toFixed(2)}</span>
+                  <span className="font-semibold text-slate-600 dark:text-slate-400">{t.nwpCsi.toFixed(2)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">ML Baseline:</span>
-                  <span className="font-semibold text-slate-600">{t.mlCsi.toFixed(2)}</span>
+                  <span className="font-semibold text-slate-600 dark:text-slate-400">{t.mlCsi.toFixed(2)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">Mixture-of-Experts:</span>
-                  <span className="font-semibold text-slate-600">{t.moeCsi.toFixed(2)}</span>
+                  <span className="font-semibold text-slate-600 dark:text-slate-400">{t.moeCsi.toFixed(2)}</span>
                 </div>
-                <div className="flex items-center justify-between pt-1 border-t border-slate-200">
+                <div className="flex items-center justify-between pt-1 border-t border-slate-200 dark:border-white/10">
                   <span className="font-bold text-brand-blue">ARJUNA Skill:</span>
                   <span className="font-extrabold text-brand-blue text-sm">{t.arjunaCsi.toFixed(2)}</span>
                 </div>

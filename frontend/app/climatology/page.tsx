@@ -45,7 +45,7 @@ export default function ClimatologyPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
+          <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-800 dark:text-emerald-400 text-xs font-semibold border border-emerald-200">
             Cumulative Monsoon Departure: <span className="font-bold">+6.4% (Normal)</span>
           </div>
         </div>
@@ -68,14 +68,14 @@ export default function ClimatologyPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Monthly Rainfall Progression */}
         <ClayCard className="p-5">
-          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
             <span>Monthly Monsoon Progression</span>
             <span className="text-[10px] text-slate-400">JJAS 2026</span>
           </h3>
 
           <div className="space-y-2.5">
             {data?.monthly.map((m) => (
-              <div key={m.month} className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+              <div key={m.month} className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 text-xs">
                 <div className="flex items-center justify-between font-semibold text-navy mb-1">
                   <span>{m.month}</span>
                   <span
@@ -102,7 +102,7 @@ export default function ClimatologyPage() {
 
         {/* Subdivision Departure Table */}
         <div className="lg:col-span-2 clay-card p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10 mb-3">
             <div>
               <h3 className="text-sm font-bold text-navy">Meteorological Subdivision Rainfall Departures</h3>
               <p className="text-xs text-slate-400">Cumulative seasonal performance against IMD benchmark categories</p>
@@ -115,7 +115,7 @@ export default function ClimatologyPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-100">
+                <tr className="text-slate-400 border-b border-slate-100 dark:border-white/10">
                   <th className="pb-2 font-semibold">Subdivision</th>
                   <th className="pb-2 font-semibold">Normal (mm)</th>
                   <th className="pb-2 font-semibold">Actual (mm)</th>
@@ -127,9 +127,9 @@ export default function ClimatologyPage() {
                 {data?.subdivisions.map((s) => {
                   const dep = Number((((s.actualMm - s.normalMm) / s.normalMm) * 100).toFixed(1));
                   return (
-                    <tr key={s.subdivision} className="hover:bg-slate-50">
+                    <tr key={s.subdivision} className="hover:bg-slate-50 dark:hover:bg-white/5 dark:bg-white/5">
                       <td className="py-2.5 font-semibold text-navy">{s.subdivision}</td>
-                      <td className="py-2.5 text-slate-600">{s.normalMm.toFixed(1)}</td>
+                      <td className="py-2.5 text-slate-600 dark:text-slate-400">{s.normalMm.toFixed(1)}</td>
                       <td className="py-2.5 font-bold text-navy">{s.actualMm.toFixed(1)}</td>
                       <td className="py-2.5">
                         <span
@@ -146,8 +146,8 @@ export default function ClimatologyPage() {
                             s.category === "Excess"
                               ? "bg-blue-100 text-blue-800"
                               : s.category === "Normal"
-                              ? "bg-emerald-100 text-emerald-800"
-                              : "bg-amber-100 text-amber-800"
+                              ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400"
+                              : "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400"
                           }`}
                         >
                           {s.category}

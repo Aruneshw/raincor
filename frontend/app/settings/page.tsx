@@ -68,7 +68,7 @@ export default function SettingsPage() {
         </div>
 
         {saved && (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-semibold animate-in fade-in">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 text-xs font-semibold animate-in fade-in">
             <Check className="w-4 h-4" /> Settings Saved to Local Cache
           </div>
         )}
@@ -85,7 +85,7 @@ export default function SettingsPage() {
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-left ${
                 activeTab === t.id
                   ? "clay-sidebar-item-active"
-                  : "bg-white/60 hover:bg-white text-slate-600 hover:text-navy border border-transparent"
+                  : "bg-white/60 hover:bg-white text-slate-600 dark:text-slate-400 hover:text-navy border border-transparent"
               }`}
             >
               {t.icon}
@@ -109,7 +109,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                     <label className="text-xs font-bold text-navy block mb-1">
                       Heavy Rainfall Threshold
                     </label>
@@ -126,7 +126,7 @@ export default function SettingsPage() {
                     <span className="text-[10px] text-slate-400 mt-1 block">Default: 64.5 mm</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                     <label className="text-xs font-bold text-navy block mb-1">
                       Very Heavy Rainfall
                     </label>
@@ -143,7 +143,7 @@ export default function SettingsPage() {
                     <span className="text-[10px] text-slate-400 mt-1 block">Default: 115.5 mm</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                     <label className="text-xs font-bold text-navy block mb-1">
                       Extremely Heavy Rainfall
                     </label>
@@ -161,7 +161,7 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-white/10">
                   <ClayButton
                     type="button"
                     variant="secondary"
@@ -187,7 +187,7 @@ export default function SettingsPage() {
             {activeTab === "map" && (
               <div className="space-y-4 text-xs">
                 <h3 className="text-base font-bold text-navy">Map Visualization &amp; Grid Defaults</h3>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="font-semibold text-navy">Mapbox GL High-Res Vector Rendering</span>
@@ -195,7 +195,7 @@ export default function SettingsPage() {
                     </div>
                     <input type="checkbox" defaultChecked className="w-4 h-4 rounded text-brand-blue" />
                   </div>
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-white/10">
                     <div>
                       <span className="font-semibold text-navy">Show National and State Boundary Outlines</span>
                       <p className="text-[11px] text-slate-400">Renders administrative borders with subtle gray contrast</p>
@@ -209,7 +209,7 @@ export default function SettingsPage() {
             {activeTab === "alerts" && (
               <div className="space-y-4 text-xs">
                 <h3 className="text-base font-bold text-navy">Operational Alert Dispatch Rules</h3>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="font-semibold text-navy">Instant Alert on Flash Flood / Extremely Heavy Grid (&gt;204.5 mm)</span>
@@ -217,7 +217,7 @@ export default function SettingsPage() {
                     </div>
                     <input type="checkbox" defaultChecked className="w-4 h-4 rounded text-brand-blue" />
                   </div>
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-white/10">
                     <div>
                       <span className="font-semibold text-navy">Regime Transition Notification (Probability &gt; 70%)</span>
                       <p className="text-[11px] text-slate-400">Alerts when numerical models exhibit &gt;6h lag vs AI regime detection</p>
@@ -231,7 +231,7 @@ export default function SettingsPage() {
             {activeTab === "forecast" && (
               <div className="space-y-4 text-xs">
                 <h3 className="text-base font-bold text-navy">Forecast Service Routing</h3>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
                   <div>
                     <span className="font-semibold text-navy">Default NWP Ensemble Source</span>
                     <select className="mt-1.5 w-full clay-input px-3 py-1.5">
@@ -247,8 +247,8 @@ export default function SettingsPage() {
             {activeTab === "models" && (
               <div className="space-y-4 text-xs">
                 <h3 className="text-base font-bold text-navy">Mixture-of-Experts (MoE) Architecture</h3>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                  <p className="text-slate-600">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-2">
+                  <p className="text-slate-600 dark:text-slate-400">
                     The ARJUNA platform deploys 7 regime-specialized expert neural networks (Active, Break, Low/Depression, Orographic, Coastal, Western Disturbance, General).
                   </p>
                   <div className="mt-2 p-2.5 rounded-lg bg-blue-50 border border-blue-200 text-brand-blue font-mono text-[11px]">

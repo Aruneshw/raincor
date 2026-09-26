@@ -624,7 +624,13 @@ export const DeckMap: React.FC = () => {
       }}
     >
       {/* Toolbar */}
-      <div className="absolute top-4 left-4 right-4 z-20 pointer-events-auto">
+      <div 
+        className="absolute top-4 left-4 right-4 z-20 pointer-events-auto"
+        onMouseEnter={() => {
+          setHoverInfo(null);
+          setHoveredCellId(null);
+        }}
+      >
         <MapToolbar />
       </div>
 
@@ -756,14 +762,26 @@ export const DeckMap: React.FC = () => {
       )}
 
       {/* Base Map Badge */}
-      <div className="absolute top-20 right-4 z-20">
+      <div 
+        className="absolute top-20 right-4 z-20"
+        onMouseEnter={() => {
+          setHoverInfo(null);
+          setHoveredCellId(null);
+        }}
+      >
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-black/60 text-slate-300 backdrop-blur-md shadow-lg border border-white/10">
           <Satellite size={14} /> Satellite
         </div>
       </div>
 
       {/* Map Navigation Controls */}
-      <div className="absolute top-[132px] right-4 z-20 flex flex-col gap-1.5">
+      <div 
+        className="absolute top-[132px] right-4 z-20 flex flex-col gap-1.5"
+        onMouseEnter={() => {
+          setHoverInfo(null);
+          setHoveredCellId(null);
+        }}
+      >
         <button
           onClick={() => setViewState((prev: any) => ({
             ...prev,
@@ -802,7 +820,13 @@ export const DeckMap: React.FC = () => {
       </div>
 
       {/* Time-Series Animation Playback Controls */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 flex items-center gap-4 bg-black/75 backdrop-blur-xl px-5 py-2.5 rounded-2xl shadow-2xl border border-white/10">
+      <div 
+        className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 flex items-center gap-4 bg-black/75 backdrop-blur-xl px-5 py-2.5 rounded-2xl shadow-2xl border border-white/10"
+        onMouseEnter={() => {
+          setHoverInfo(null);
+          setHoveredCellId(null);
+        }}
+      >
         <button
           onClick={() => setIsPlaying(!isPlaying)}
           className="w-9 h-9 flex items-center justify-center bg-cyan-500 text-white rounded-full hover:bg-cyan-400 transition-colors shadow-lg shadow-cyan-500/30"
@@ -843,12 +867,24 @@ export const DeckMap: React.FC = () => {
       </div>
 
       {/* Map Legend */}
-      <div className="absolute left-4 bottom-4 z-20 max-w-lg pointer-events-auto">
+      <div 
+        className="absolute left-4 bottom-4 z-20 max-w-lg pointer-events-auto"
+        onMouseEnter={() => {
+          setHoverInfo(null);
+          setHoveredCellId(null);
+        }}
+      >
         <MapLegend layer={selectedLayer} />
       </div>
 
       {/* Live Viewport Info & Domain Badge */}
-      <div className="absolute right-4 bottom-4 z-20 hidden sm:flex flex-col items-end gap-2">
+      <div 
+        className="absolute right-4 bottom-4 z-20 hidden sm:flex flex-col items-end gap-2"
+        onMouseEnter={() => {
+          setHoverInfo(null);
+          setHoveredCellId(null);
+        }}
+      >
         <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 shadow-lg text-[10px] font-mono text-slate-300">
           <span>Lat: {viewState.latitude?.toFixed(2)}°</span>
           <span>Lon: {viewState.longitude?.toFixed(2)}°</span>

@@ -72,7 +72,7 @@ export default function UncertaintyPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* National Quantile Medians */}
         <ClayCard className="p-5">
-          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+          <h3 className="text-sm font-bold text-navy mb-3 pb-2 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
             <span>National Domain Quantiles</span>
             <span className="text-[10px] text-slate-400">All India Medians</span>
           </h3>
@@ -94,7 +94,7 @@ export default function UncertaintyPage() {
 
         {/* Regional Uncertainty Breakdown */}
         <div className="lg:col-span-2 clay-card p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10 mb-3">
             <div>
               <h3 className="text-sm font-bold text-navy">Subdivision Uncertainty Characterization</h3>
               <p className="text-xs text-slate-400">Ensemble spread and confidence ratings by meteorological zone</p>
@@ -108,24 +108,24 @@ export default function UncertaintyPage() {
             {data?.zones.map((zone) => (
               <div
                 key={zone.region}
-                className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
+                className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
               >
                 <div>
                   <span className="font-semibold text-navy">{zone.region}</span>
                   <div className="text-[11px] text-slate-400 mt-0.5">
-                    Mean Spread: <strong className="text-slate-700">{zone.avgSpreadMm} mm</strong> | Shannon Entropy:{" "}
-                    <strong className="text-slate-700">{zone.entropy}</strong>
+                    Mean Spread: <strong className="text-slate-700 dark:text-slate-300">{zone.avgSpreadMm} mm</strong> | Shannon Entropy:{" "}
+                    <strong className="text-slate-700 dark:text-slate-300">{zone.entropy}</strong>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-[11px]">
-                  <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-semibold">
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 font-semibold">
                     {zone.confidenceDistribution.high}% High
                   </span>
-                  <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 font-medium">
+                  <span className="px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 font-medium">
                     {zone.confidenceDistribution.medium}% Med
                   </span>
-                  <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-medium">
+                  <span className="px-2 py-0.5 rounded-md bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-400 font-medium">
                     {zone.confidenceDistribution.low}% Low
                   </span>
                 </div>
