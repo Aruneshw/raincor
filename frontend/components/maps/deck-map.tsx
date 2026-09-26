@@ -6,7 +6,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import DeckGL from "@deck.gl/react";
 import { GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { FlyToInterpolator } from "@deck.gl/core";
-import { Play, Pause, Clock, Satellite } from "lucide-react";
+import { Play, Pause, Clock, Satellite, Plus, Minus, Maximize } from "lucide-react";
 
 import { useMapStore } from "@/store/map-store";
 import { useForecastStore } from "@/store/forecast-store";
@@ -757,6 +757,37 @@ export const DeckMap: React.FC = () => {
         </div>
       </div>
 
+      {/* Map Navigation Controls */}
+      <div className="absolute top-[132px] right-4 z-20 flex flex-col gap-1.5">
+        <button
+          onClick={() => setViewState((prev: any) => ({ ...prev, zoom: Math.min(prev.maxZoom || 12, prev.zoom + 1), transitionDuration: 300 }))}
+          className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors"
+          title="Zoom In"
+        >
+          <Plus size={16} />
+        </button>
+        <button
+          onClick={() => setViewState((prev: any) => ({ ...prev, zoom: Math.max(prev.minZoom || 3, prev.zoom - 1), transitionDuration: 300 }))}
+          className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors"
+          title="Zoom Out"
+        >
+          <Minus size={16} />
+        </button>
+        <button
+          onClick={() => setViewState((prev: any) => ({ 
+            ...prev, 
+            longitude: INITIAL_VIEW_STATE.longitude, 
+            latitude: INITIAL_VIEW_STATE.latitude, 
+            zoom: INITIAL_VIEW_STATE.zoom, 
+            transitionDuration: 1000 
+          }))}
+          className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors mt-2"
+          title="Reset View"
+        >
+          <Maximize size={14} />
+        </button>
+      </div>
+
       {/* Time-Series Animation Playback Controls */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 flex items-center gap-4 bg-black/75 backdrop-blur-xl px-5 py-2.5 rounded-2xl shadow-2xl border border-white/10">
         <button
@@ -803,17 +834,25 @@ export const DeckMap: React.FC = () => {
         <MapLegend layer={selectedLayer} />
       </div>
 
-      {/* Domain Info Badge */}
-      <div className="absolute right-4 bottom-4 z-20 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 shadow-lg text-xs font-semibold text-slate-200">
-        <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-        <span>
-          {viewMode === "district"
-            ? `${districts.length || "700+"} Districts`
-            : `${grids.length.toLocaleString()} Grids`}
-        </span>
-        <span className="text-slate-500 font-normal">
-          {viewMode === "district" ? "| IMD Admin Level" : "| 0.25° IMD Grid"}
-        </span>
+      {/* Live Viewport Info & Domain Badge */}
+      <div className="absolute right-4 bottom-4 z-20 hidden sm:flex flex-col items-end gap-2">
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 shadow-lg text-[10px] font-mono text-slate-300">
+          <span>Lat: {viewState.latitude?.toFixed(2)}°</span>
+          <span>Lon: {viewState.longitude?.toFixed(2)}°</span>
+          <span className="text-cyan-400 font-semibold">Z: {viewState.zoom?.toFixed(1)}</span>
+        </div>
+        
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 shadow-lg text-xs font-semibold text-slate-200">
+          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+          <span>
+            {viewMode === "district"
+              ? `${districts.length || "700+"} Districts`
+              : `${grids.length.toLocaleString()} Grids`}
+          </span>
+          <span className="text-slate-500 font-normal">
+            {viewMode === "district" ? "| IMD Admin Level" : "| 0.25° IMD Grid"}
+          </span>
+        </div>
       </div>
     </div>
   );
