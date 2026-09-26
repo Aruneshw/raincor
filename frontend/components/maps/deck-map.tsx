@@ -6,7 +6,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import DeckGL from "@deck.gl/react";
 import { GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { FlyToInterpolator } from "@deck.gl/core";
-import { Play, Pause, Clock, Satellite, Plus, Minus, Maximize } from "lucide-react";
+import { Play, Pause, Clock, Satellite, Plus, Minus, Maximize, Minimize } from "lucide-react";
 
 import { useMapStore } from "@/store/map-store";
 import { useForecastStore } from "@/store/forecast-store";
@@ -192,6 +192,7 @@ export const DeckMap: React.FC = () => {
   const [statesGeoJson, setStatesGeoJson] = useState<any>(null);
   const [districts, setDistricts] = useState<DistrictForecast[]>([]);
   const [viewState, setViewState] = useState<any>(INITIAL_VIEW_STATE);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Time-Series Animation State
   const [isPlaying, setIsPlaying] = useState(false);
@@ -612,7 +613,11 @@ export const DeckMap: React.FC = () => {
 
   return (
     <div 
-      className="relative flex flex-col w-full h-[620px] rounded-3xl bg-[#0a0e17] border border-white/10 shadow-2xl overflow-hidden select-none"
+      className={`flex flex-col bg-[#0a0e17] overflow-hidden select-none transition-all duration-300 ease-in-out ${
+        isFullscreen
+          ? "fixed inset-0 z-[100] w-screen h-screen rounded-none"
+          : "relative w-full h-[620px] rounded-3xl border border-white/10 shadow-2xl"
+      }`}
       onMouseLeave={() => {
         setHoverInfo(null);
         setHoveredCellId(null);
@@ -784,18 +789,15 @@ export const DeckMap: React.FC = () => {
           <Minus size={16} />
         </button>
         <button
-          onClick={() => setViewState((prev: any) => ({ 
-            ...prev, 
-            longitude: INITIAL_VIEW_STATE.longitude, 
-            latitude: INITIAL_VIEW_STATE.latitude, 
-            zoom: INITIAL_VIEW_STATE.zoom, 
-            transitionDuration: 1000,
-            transitionInterpolator: new FlyToInterpolator({ speed: 1.2 }),
-          }))}
+          onClick={() => {
+            setIsFullscreen(!isFullscreen);
+            // Optionally dispatch a resize event so DeckGL re-measures the container
+            setTimeout(() => window.dispatchEvent(new Event("resize")), 100);
+          }}
           className="w-8 h-8 flex items-center justify-center bg-black/60 text-slate-300 hover:bg-black/80 hover:text-white backdrop-blur-md rounded-lg border border-white/10 shadow-lg transition-colors mt-2"
-          title="Reset View"
+          title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
         >
-          <Maximize size={14} />
+          {isFullscreen ? <Minimize size={14} /> : <Maximize size={14} />}
         </button>
       </div>
 
